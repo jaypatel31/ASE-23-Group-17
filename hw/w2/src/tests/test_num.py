@@ -10,7 +10,6 @@ class TestNUM(unittest.TestCase):
         for value in self.values:
             self.num_instance.add(value)
         
-
     def test_num_add(self):
         # Test checking the addition of new number
         self.assertEqual(self.num_instance.n, len(self.values)) 
