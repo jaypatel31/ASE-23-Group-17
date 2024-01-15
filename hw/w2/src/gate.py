@@ -1,6 +1,8 @@
 import sys
 from config import the
 from test_runner import test
+import re,ast,fileinput
+from DATA import DATA
 
 def help():
     print("OPTIONS:")
@@ -10,7 +12,7 @@ def help():
     print("  -k --k        low class frequency kludge      = 1")
     print("  -m --m        low attribute frequency kludge  = 2")
     print("  -s --seed     random number seed              = 31210")
-    print("  -t --test     test the Classes                = test")
+    print("  -t --todo     todo an action command          = todo")
     sys.exit(0)
 
 def get_option_(arg):
@@ -23,19 +25,48 @@ def get_option_(arg):
         return False
     elif arg == "-s" or arg == "--seed":
         return "seed"
-    elif arg == "-t" or arg == "--test":
-        test()
-        return "test"
+    elif arg == "-t" or arg == "--todo":
+        # test()
+        return "todo"
     else:
         print("Unknown option, please run -h (or) --help for more details.")
         return False
 
+
+
+
+def coerce(s):
+  try: return ast.literal_eval(s)
+  except Exception: return s
+
+def csv(file="-"):
+  with  fileinput.FileInput(None if file=="-" else file) as src:
+    for line in src:
+      line = re.sub(r'([\n\t\r"\' ]|#.*)', '', line)
+      if line: yield [coerce(x) for x in line.split(",")]
+
+def dstats():
+    # Load Data
+    data = DATA(0)
+    for row in csv(the["file"]): 
+        data.add(row)
+
+
+    print(data.stats())
+    
+
+
+    sys.exit(0)
+
 def main():
     args = sys.argv[1:]
+    # print("args",args)
     next_value = False
     option_details = ''
     for arg in args:
-        if option_details == "test":
+        if option_details == "todo":
+            if(arg=="stats"): dstats()
+            else: test()
             option_details = ""
             next_value = False
             continue
@@ -49,6 +80,9 @@ def main():
             continue
         else:
             sys.exit(0)
-    print(the)
-        
-main()
+
+    # print(the)
+
+if __name__ == '__main__':
+    main()        
+

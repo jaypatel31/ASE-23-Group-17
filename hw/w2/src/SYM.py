@@ -1,14 +1,4 @@
 import math
-the = {
-    "cohen": 0.35, 
-    "file": "../data/auto93.csv", 
-    "help": False, 
-    "k": 1, 
-    "m": 2, 
-    "seed": 31210, 
-    "todo": "help"
-    }
-
 class SYM:
     def __init__(self, s, n):
         self.txt = s or " "
@@ -36,9 +26,6 @@ class SYM:
 
     def small(self):
         return 0
-
-    def like(self, x, prior):
-        return ((self.has[x] if x in self.has else 0) + the['m'] * prior) / (self.n + the['m'])
 
 
 
