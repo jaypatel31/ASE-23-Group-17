@@ -32,6 +32,7 @@ class DATA:
 
     def stats(self, cols=None, fun=None, ndivs=None):
         u = {".N": len(self.rows)}
-        for col in (self.cols[cols or "y"]):
-            u[col.txt] = round(col.get(fun or "mid"), ndivs)
+        col_name = cols if cols else self.cols.all
+        for col in (col_name):
+            u[col.txt] = col.mid()
         return u
