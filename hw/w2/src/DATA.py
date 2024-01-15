@@ -20,7 +20,7 @@ class DATA:
     # methods in the respective classes they are called on
     def mid(self, cols=None):
         u = [col.mid() for col in (cols or self.cols.all)]
-        return ROW(u).cells
+        return ROW(u)
 
     def div(self, cols=None):
         u = [col.div() for col in (cols or self.cols.all)]
@@ -30,10 +30,9 @@ class DATA:
         u = [col.small() for col in self.cols.all]
         return ROW(u)
 
-    def stats(self, cols=None, fun=None, ndivs=None):
+    def stats(self, cols=None, fun=None, ndivs=2):
         u = {".N": len(self.rows)}
         col_name = cols if cols else self.cols.all
         for col in (col_name):
-            u[col.txt] = col.mid()
-
+            u[col.txt] = round(float(col.mid()), ndivs) if isinstance(col.mid(), (int, float)) else col.mid()
         return u
