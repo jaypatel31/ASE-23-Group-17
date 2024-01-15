@@ -9,13 +9,16 @@ class TestDATA(unittest.TestCase):
         self.assertEqual(data.rows, [])
         self.assertIsNone(data.cols)
 
-    # def test_add_with_no_existing_cols(self):
-    #     data = DATA([])
-    #     test_row = ['a', 'b', 'c']
-    #     data.add(test_row)
-    #     self.assertIsNotNone(data.cols)
-    #     self.assertEqual(len(data.rows), 1)
-    #     self.assertIsInstance(data.rows[0], ROW)
+    def test_addition_of_rows(self):
+        # Test addition of rows to DATA
+        data = DATA([])
+        data.cols = COLS(ROW(['Age', 'name', 'Grade!']))
+        test_row = [12, 'Jay', 32]
+        data.add(test_row)
+        test_row2 = [6, 'Jay', 12]
+        data.add(test_row2)
+        self.assertEqual(len(data.rows), 2, "Should have 2 rows added")
+        self.assertIsNotNone(data.cols, "Cols should be initialized")
 
     def test_add_with_existing_cols(self):
         data = DATA([])
@@ -26,12 +29,9 @@ class TestDATA(unittest.TestCase):
         data.add(test_row2)
         test_row3 = [6, 'Mihir', 12]
         data.add(test_row3)
-        print(data.stats())
-        self.assertEqual(len(data.rows), 1)
+        # print()
+        self.assertEqual(len(data.rows), 3)
         self.assertIsInstance(data.rows[0], ROW)
-
-    # Add more test cases for mid, div, small, and stats methods
-    # after implementing their logic in COLS and ROW classes.
 
 if __name__ == '__main__':
     unittest.main()

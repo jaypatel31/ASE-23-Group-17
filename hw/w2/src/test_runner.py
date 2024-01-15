@@ -9,6 +9,8 @@ sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tests'
 from NUM import NUM
 from test_num import TestNUM
 from test_sym import TestSYM
+from test_cols import TestCOLS
+from test_data import TestDATA
 
 class CollectAfterT(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
@@ -17,9 +19,11 @@ class CollectAfterT(argparse.Action):
 def run_tests(test_name):
     suiteNUM = unittest.TestLoader().loadTestsFromTestCase(TestNUM)
     suiteSYM = unittest.TestLoader().loadTestsFromTestCase(TestSYM)
+    suiteCOL = unittest.TestLoader().loadTestsFromTestCase(TestCOLS)
+    suiteDATA = unittest.TestLoader().loadTestsFromTestCase(TestDATA)
 
-    suite = unittest.TestSuite([suiteNUM, suiteSYM])
-    suite_all = unittest.TestSuite([suiteNUM, suiteSYM])
+    suite = unittest.TestSuite([suiteNUM, suiteSYM, suiteDATA, suiteCOL])
+    suite_all = unittest.TestSuite([suiteNUM, suiteSYM, suiteDATA, suiteCOL])
 
 
     if "all" in test_name:
