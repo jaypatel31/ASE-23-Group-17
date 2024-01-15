@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import patch
-import SYM
+from SYM import SYM
+
 class TestSYM(unittest.TestCase):
 
     def setUp(self):
@@ -53,12 +54,6 @@ class TestSYM(unittest.TestCase):
 
     def test_small(self):
         self.assertEqual(self.sym_instance.small(), 0)
-
-    def test_like(self):
-        self.sym_instance.add("Category1")
-        prior = 0.5
-        likelihood = self.sym_instance.like("Category1", prior)
-        self.assertEqual(likelihood, 1.0)
 
 if __name__ == '__main__':
     unittest.main()

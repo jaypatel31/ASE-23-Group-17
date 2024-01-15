@@ -8,6 +8,7 @@ the = {
     "seed": 31210, 
     "todo": "help"
     }
+
 class SYM:
     def __init__(self, s, n):
         self.txt = s or " "
