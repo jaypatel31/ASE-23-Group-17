@@ -6,6 +6,7 @@ from ROW import ROW
 from NUM import NUM
 from SYM import SYM
 
+
 class TestCOLS(unittest.TestCase):
 
     def test_initialization_of_columns(self):
@@ -13,7 +14,7 @@ class TestCOLS(unittest.TestCase):
         row = ROW(['AGE', 'name', 'GRADE!'])
         cols = COLS(row)
 
-        print(cols.all[0].n)
+        # print(cols.all[0].n)
         row2 = ROW([10, 'JAY', 12])
         
         cols.add(row2)
@@ -40,7 +41,7 @@ class TestCOLS(unittest.TestCase):
         row = ROW(['AGE', 'name', 'GRADE!'])
         cols = COLS(row)
 
-        print(cols.all[0].n)
+        # print(cols.all[0].n)
         row2 = ROW([11, 'JAY', 12])
         
         cols.add(row2)

@@ -7,7 +7,7 @@ class COLS:
         self.klass = None
 
         for at, txt in enumerate(row):
-            col = (NUM if txt.isupper() else SYM)(txt, at)
+            col = (NUM if txt[0].isupper() else SYM)(txt, at)
             self.all.append(col)
 
             if not txt.endswith('X'):
