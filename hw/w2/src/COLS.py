@@ -21,5 +21,5 @@ class COLS:
     def add(self, row):
         for cols in [self.x, self.y]:
             for col in cols:
-                col.add(row[col.at])
+                col.add(row.cells[col.at])
         return row
