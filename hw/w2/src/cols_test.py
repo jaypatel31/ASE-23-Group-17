@@ -1,9 +1,6 @@
 import unittest
 from unittest.mock import patch
 
-# Assuming NUM, SYM, and COLS classes are defined in the same file or are properly accessible
-from NUM import NUM
-from SYM import SYM
 from COLS import COLS
 
 class TestCOLS(unittest.TestCase):

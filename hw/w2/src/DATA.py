@@ -14,7 +14,7 @@ class DATA:
                 fun(self, row)
             self.rows.append(self.cols.add(row))
         else:
-            self.cols = COLS(row)  # Assuming COLS is another class to be implemented
+            self.cols = COLS(row)  
 
     # The following methods need the implementation of mid, div, small, and stats 
     # methods in the respective classes they are called on

@@ -7,11 +7,11 @@ class TestNUM(unittest.TestCase):
         # Create an instance of NUM for testing
         self.num_instance = NUM()
         self.values = [3, 7, 5, 8, 2]
+        for value in self.values:
+            self.num_instance.add(value)
         
 
     def test_num_add(self):
-        for value in self.values:
-            self.num_instance.add(value)
         # Test checking the addition of new number
         self.assertEqual(self.num_instance.n, len(self.values)) 
     
