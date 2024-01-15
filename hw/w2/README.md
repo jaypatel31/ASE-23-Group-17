@@ -7,7 +7,7 @@ Output: We got the classes working as expected.
 Stats output:
 ![Stats](./images/result.jpeg)
 
-We added pre-commit hook as was expect:
+We added pre-commit hook as was expected:
 
 Pre-commit hook code:
 ![Precommit Code](./images/pre_code.jpeg)
