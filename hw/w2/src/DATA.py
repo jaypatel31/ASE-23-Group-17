@@ -20,7 +20,7 @@ class DATA:
     # methods in the respective classes they are called on
     def mid(self, cols=None):
         u = [col.mid() for col in (cols or self.cols.all)]
-        return ROW(u)
+        return ROW(u).cells
 
     def div(self, cols=None):
         u = [col.div() for col in (cols or self.cols.all)]
