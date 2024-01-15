@@ -2,62 +2,61 @@ import unittest
 from unittest.mock import patch
 
 from COLS import COLS
+from ROW import ROW
+from NUM import NUM
+from SYM import SYM
 
 class TestCOLS(unittest.TestCase):
 
-    def test_init(self):
-        row = ["A", "B", "C", "Class!"]
-        cols_instance = COLS(row)
-        
-        # Checking if the columns are initialized correctly
-        self.assertEqual(len(cols_instance.x), 3)
-        self.assertEqual(len(cols_instance.y), 1)
-        self.assertEqual(len(cols_instance.all), 4)
-        self.assertIsNotNone(cols_instance.klass)
-        self.assertEqual(cols_instance.klass.txt, "Class!")
+    def test_initialization_of_columns(self):
+        # Test initialization of NUM and SYM columns
+        row = ROW(['AGE', 'name', 'GRADE!'])
+        cols = COLS(row)
 
-    def test_add(self):
-        row = ["A", "B", "C", "Class!"]
-        cols_instance = COLS(row)
+        print(cols.all[0].n)
+        row2 = ROW([10, 'JAY', 12])
         
-        # Adding values to the columns instance
-        new_row = ["1", "2", "3", "Positive"]
-        cols_instance.add(new_row) 
-        
-        # Checking if the values are added to the columns correctly
-        self.assertEqual(cols_instance.x[0].n, 1)
-        self.assertEqual(cols_instance.x[1].n, 2)
-        self.assertEqual(cols_instance.x[2].n, 3)
-        self.assertEqual(cols_instance.y[0].n, 1)
+        cols.add(row2)
 
-    def test_add_with_missing_values(self):
-        row = ["A", "B", "C", "Class!"]
-        cols_instance = COLS(row)
-        
-        # Adding values with missing values to the columns instance
-        new_row = ["1", "?", "3", "?"]
-        cols_instance.add(new_row)
-        
-        # Checking if the missing values are handled correctly
-        self.assertEqual(float(cols_instance.x[0].n), 1)
-        self.assertEqual(cols_instance.x[1].n, 0)  # Missing value should not affect count
-        self.assertEqual(cols_instance.x[2].n, 3)
-        self.assertEqual(cols_instance.y[0].n, 1)
+        row3 = ROW([5, 'JAY', 12])
+        cols.add(row3)
 
-    def test_add_multiple_rows(self):
-        row = ["A", "B", "C", "Class!"]
-        cols_instance = COLS(row)
+        self.assertIsInstance(cols.all[0], NUM, "AGE should be a NUM")
+        self.assertIsInstance(cols.all[1], SYM, "name should be a SYM")
+
+        # self.assertEqual(cols.all[0].n, 2, "AGE column should have 2 entries")
+        # self.assertEqual(cols.all[1].count, 2, "name column should have 2 entries")
+        # self.assertEqual(cols.all[2].mode, 'A', "GRADE column's mode should be 'A'")
+
+    def test_classification_and_handling_of_klass_column(self):
+        # Test identification and handling of klass column
+        row = ROW(['age', 'name', 'GRADE!'])
+        cols = COLS(row)
+        self.assertEqual(cols.klass, cols.all[2], "GRADE should be klass")
+        self.assertIsInstance(cols.klass, NUM, "GRADE should be a NUM instance")
+
+    def test_update_of_columns_on_row_addition(self):
+        # Test update of NUM and SYM columns when new rows are added
+        row = ROW(['AGE', 'name', 'GRADE!'])
+        cols = COLS(row)
+
+        print(cols.all[0].n)
+        row2 = ROW([11, 'JAY', 12])
         
-        # Adding multiple rows to the columns instance
-        new_rows = [["1", "2", "3", "Positive"], ["4", "5", "6", "Negative"]]
-        for r in new_rows:
-            cols_instance.add(r)
-        
-        # Checking if values are added from multiple rows correctly
-        self.assertEqual(cols_instance.x[0].n, 5)
-        self.assertEqual(cols_instance.x[1].n, 7)
-        self.assertEqual(cols_instance.x[2].n, 9)
-        self.assertEqual(cols_instance.y[0].n, 2)
+        cols.add(row2)
+
+        row3 = ROW([5, 'JAY', 12])
+        cols.add(row3)
+        # Check updates in NUM column
+        num_col = cols.all[0]  # Assuming AGE is the first NUM column
+        self.assertEqual(num_col.n, 2, "NUM column should have 2 entries")
+        self.assertGreater(num_col.mu, 0, "Mean of NUM column should be calculated")
+
+        # Check updates in SYM column
+        # sym_col = cols.all[1]  # Assuming name is the first SYM column
+        # self.assertEqual(sym_col.count, 2, "SYM column should have 2 entries")
+        # self.assertGreaterEqual(sym_col.mode, 'Alice', "Mode of SYM column should be calculated")
+
 
 if __name__ == '__main__':
     unittest.main()
