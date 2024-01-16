@@ -7,7 +7,7 @@ from DATA import DATA
 def help():
     print("OPTIONS:")
     print("  -c --cohen    small effect size               = .35")
-    print("  -f --file     csv data file name              = ../data/auto93.csv")
+    print("  -f --file     csv data file name              = ././data/auto93.csv")
     print("  -h --help     show help                       = false")
     print("  -k --k        low class frequency kludge      = 1")
     print("  -m --m        low attribute frequency kludge  = 2")
@@ -66,7 +66,7 @@ def main():
     for arg in args:
         if option_details == "todo":
             if(arg=="stats"): dstats()
-            else: test()
+            else: test(arg)
             option_details = ""
             next_value = False
             continue
