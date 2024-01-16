@@ -12,10 +12,6 @@ from tests.test_sym import TestSYM
 from tests.test_cols import TestCOLS
 from tests.test_data import TestDATA
 
-class CollectAfterT(argparse.Action):
-    def __call__(self, parser, namespace, values, option_string=None):
-        setattr(namespace, self.dest, [option_string] + values)
-
 def run_tests(test_name):
     suiteNUM = unittest.TestLoader().loadTestsFromTestCase(TestNUM)
     suiteSYM = unittest.TestLoader().loadTestsFromTestCase(TestSYM)
@@ -27,9 +23,7 @@ def run_tests(test_name):
 
 
     if "all" in test_name:
-        runner = unittest.TextTestRunner()
-        result = runner.run(suite)
-        return len(result.failures)
+        pass
         
     else:
         filtered_suite = unittest.TestSuite()
@@ -37,11 +31,9 @@ def run_tests(test_name):
             for test in test_class:
                 test_id_parts = test.id().split('.')
                 test_name_ex = test_id_parts[-1]
-                if any(name == test_name_ex for name in test_name):
+                if test_name_ex == test_name:
                     filtered_suite.addTest(test)
         suite = filtered_suite
-        suite = unittest.TestSuite([test for test in suite if any(name in test.id() for name in test_name)])
-
 
     if(len(suite._tests)==0):
         print("No tests found for: ", test_name)
@@ -53,18 +45,18 @@ def run_tests(test_name):
                 print(test_name_ex)
         return 1
     
-    
-
+    runner = unittest.TextTestRunner()
+    result = runner.run(suite)
     return len(result.failures)
 
 def test(arg):
-    # args = sys.argv[1:]
-    # test_index = args.index('-t') if '-t' in args else args.index('--test') if '--test' in args else -1
+    args = sys.argv[1:]
+    test_index = args.index('-t') if '-t' in args else args.index('--test') if '--test' in args else -1
 
-    # if test_index != -1:
-    #     next_option_index = next((i for i, arg in enumerate(args[test_index + 1:], start=test_index + 1) if arg.startswith('-')), len(args))
-    #     test_args = args[test_index + 1:next_option_index]
-    #     print(f"Running tests: {test_args}\n")
+    if test_index != -1:
+        next_option_index = next((i for i, arg in enumerate(args[test_index + 1:], start=test_index + 1) if arg.startswith('-')), len(args))
+        test_args = args[test_index + 1:next_option_index]
+        print(f"Running tests: {test_args}\n")
     
 
     fail_count = run_tests(arg)
