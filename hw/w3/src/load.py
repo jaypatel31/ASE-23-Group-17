@@ -3,7 +3,7 @@ from config import the
 from test_runner import test
 import re,ast,fileinput
 from DATA import DATA
-
+from ROW import likes
 def coerce(s):
   try: return ast.literal_eval(s)
   except Exception: return s
@@ -56,7 +56,17 @@ def load():
            obj.add(row)
            
 
-    
+def learn(data, row, my, kl):
+    my['n'] += 1
+    kl = row.cells[data.cols.klass.at]
+
+    if my['n'] > 10:
+        my['tries'] += 1
+        my['acc'] += 1 if kl == likes(row, my['datas']) else 0
+
+    my['datas'][kl] = my['datas'].get(kl, DATA({data.cols.names}))
+    my['datas'][kl].add(row)
+
 
 
 if __name__ == '__main__':
