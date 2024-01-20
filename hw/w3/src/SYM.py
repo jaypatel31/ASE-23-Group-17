@@ -16,6 +16,8 @@ class SYM:
             self.has[x] = 1 + (self.has[x] if x in self.has else 0)
             if self.has[x] > self.most:
                 self.most, self.mode = self.has[x], x
+        # if the.m ==0:
+        #     print(self.n,x)
 
     def mid(self):
         return self.mode
@@ -30,6 +32,9 @@ class SYM:
         return 0
     
     def like(self, x, prior):
+        if self.n+the.m == 0:
+            # print(self.n)
+            return ((self.has.get(x, 0) or 0) + the.m * prior)
         return ((self.has.get(x, 0) or 0) + the.m * prior) / (self.n + the.m)
 
 
