@@ -55,5 +55,15 @@ class TestSYM(unittest.TestCase):
     def test_small(self):
         self.assertEqual(self.sym_instance.small(), 0)
 
+    def test_like(self):
+        x = "Category1"
+        prior = 0.6
+        self.sym_instance.add("Category1")
+        
+        likelihood = self.sym_instance.like(x, prior)
+        
+        expected = (1 + 2 * 0.6) / (1 + 2)        
+        self.assertAlmostEqual(likelihood, expected)
+
 if __name__ == '__main__':
     unittest.main()

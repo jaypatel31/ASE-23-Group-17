@@ -21,6 +21,18 @@ class TestNUM(unittest.TestCase):
         self.assertAlmostEqual(self.num_instance.m2, sum((x - self.num_instance.mu) ** 2 for x in self.values), delta=1e-10)
         self.assertEqual(self.num_instance.lo, min(self.values))
         self.assertEqual(self.num_instance.hi, max(self.values))
+    
+    def test_like_function(self):
+        x = 5
+        mu = 5 
+        sd = 2
+        expected_value = 0.2
+        
+        with patch.object(NUM, 'mid', return_value=mu):
+            with patch.object(NUM, 'div', return_value=sd):
+                likelihood = self.num_instance.like(x,0,0)
+        
+        self.assertAlmostEqual(likelihood, expected_value)
 
 if __name__ == '__main__':
     unittest.main()
