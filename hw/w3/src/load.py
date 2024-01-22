@@ -106,7 +106,6 @@ def bayes():
    print(wme['acc'] / wme['tries']*100)
 
 def soyabean_bayes():
-   print("k","m","Accuracy")
    for k in range(4):
     for m in range(4):
        the.k = k
@@ -122,17 +121,28 @@ def soyabean_bayes():
             n = n+1
          else:
             learn(data,ROW(row),wme)
-       print(k,m,wme['acc'] / wme['tries']*100)
+    #    print(k,m,wme['acc'] / wme['tries']*100)
+       print(f"{k:<10}{m:<10}{format(wme['acc'] / wme['tries']*100, '.2f')}%")
 
-
-if __name__ == '__main__':
-   data1 = {}
-   data2 = {}
+def naive():
+   print("\nLoading of files completed\n")
    load()
 
    test_one_row()
 
+   print("Accuracy for diabetes.csv:")
    bayes()
 
+   print("\nAccuracies for soybean.csv with different k and m values:")
+   print("-" * 52)
+   print(f"{'k':<10}{'m':<10}{'Accuracy'}")
+   print("-" * 52)
+   
    soyabean_bayes()
+
+data1 = {}
+data2 = {}   
+if __name__ == '__main__':
+   
+   naive()
    

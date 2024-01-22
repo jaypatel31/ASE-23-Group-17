@@ -25,10 +25,17 @@ def display_table(dataset_name, counts, percentages):
         print(f"{cls:<30}{count:<10}{format(percentages[cls], '.2f')}%")
     print()
 
-# Example usage
-diabetes_counts, diabetes_percentages = analyze_csv('diabetes.csv')
-soybean_counts, soybean_percentages = analyze_csv('soybean.csv')
+def display():
+    # Example usage
+    diabetes_counts, diabetes_percentages = analyze_csv('./data/diabetes.csv')
+    soybean_counts, soybean_percentages = analyze_csv('./data/soybean.csv')
 
-# Display results in table format
-display_table("Diabetes", diabetes_counts, diabetes_percentages)
-display_table("Soybean", soybean_counts, soybean_percentages)
+    # Display results in table format
+    display_table("Diabetes", diabetes_counts, diabetes_percentages)
+    display_table("Soybean", soybean_counts, soybean_percentages)
+
+
+if __name__=="__main__":
+    display()
+
+    
