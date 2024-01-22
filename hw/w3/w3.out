@@ -36,6 +36,15 @@ Task 2:
 
 Loading of files completed
 
+row = ROW([1,87,78,27,32,34.6,0.101,22,"negative"]) 
+liked1 = row.likes(data1) 
+#('negative', 7.970983172335202e-20)
+
+soyabean_row = ['july', 'normal', 'gt-norm', 'norm', 'yes', 'same-lst-yr', 'scattered', 'severe', 'none', '80-89', 'abnorm', 'abnorm', 'absent', 'dna', 'dna', 'absent', 'absent', 'absent', 'abnorm', 'yes', 'above-sec-nde', 'dna', 'present', 'firm-and-dry', 'absent', 'none', 'absent', 'norm', 'dna', 'norm', 'absent', 'absent', 'norm', 'absent', 'norm','diaporthe-stem-canker']
+row = ROW(soyabean_row) 
+liked2 = row.likes(data2) 
+#('diaporthe-stem-canker', 1.9239137836110653e-06)
+
 Task 3:
 
 Accuracy for diabetes.csv:
