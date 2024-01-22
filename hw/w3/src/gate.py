@@ -3,7 +3,8 @@ from config import the
 from test_runner import test
 import re,ast,fileinput
 from DATA import DATA
-
+from load import naive
+from ascii_table import display
 def help():
     print("OPTIONS:")
     print("  -c --cohen    small effect size               = .35")
@@ -66,6 +67,11 @@ def main():
     for arg in args:
         if option_details == "todo":
             if(arg=="stats"): dstats()
+            elif(arg=="load"):
+                print("Task 1:\n\n")
+                display()
+                print("Task 2:")
+                naive()
             else: test(arg)
             option_details = ""
             next_value = False

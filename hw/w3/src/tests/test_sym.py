@@ -62,7 +62,7 @@ class TestSYM(unittest.TestCase):
         
         likelihood = self.sym_instance.like(x, prior)
         
-        expected = (1 + 2 * 0.6) / (1 + 2)        
+        expected = round((1 + 2 * 0.6) / (1 + 2),1)    
         self.assertAlmostEqual(likelihood, expected)
 
 if __name__ == '__main__':

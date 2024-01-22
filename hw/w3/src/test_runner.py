@@ -11,15 +11,17 @@ from tests.test_num import TestNUM
 from tests.test_sym import TestSYM
 from tests.test_cols import TestCOLS
 from tests.test_data import TestDATA
+from tests.test_load import TestLoad
 
 def run_tests(test_name):
     suiteNUM = unittest.TestLoader().loadTestsFromTestCase(TestNUM)
     suiteSYM = unittest.TestLoader().loadTestsFromTestCase(TestSYM)
     suiteCOL = unittest.TestLoader().loadTestsFromTestCase(TestCOLS)
     suiteDATA = unittest.TestLoader().loadTestsFromTestCase(TestDATA)
+    suiteLOAD = unittest.TestLoader().loadTestsFromTestCase(TestLoad)
 
-    suite = unittest.TestSuite([suiteNUM, suiteSYM, suiteDATA, suiteCOL])
-    suite_all = unittest.TestSuite([suiteNUM, suiteSYM, suiteDATA, suiteCOL])
+    suite = unittest.TestSuite([suiteNUM, suiteSYM, suiteDATA, suiteCOL,suiteLOAD])
+    suite_all = unittest.TestSuite([suiteNUM, suiteSYM, suiteDATA, suiteCOL,suiteLOAD])
 
 
     if "all" in test_name:
