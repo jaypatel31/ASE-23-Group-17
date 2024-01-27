@@ -1,10 +1,21 @@
 from ROW import ROW
 from COLS import COLS
+import re,ast,fileinput
 
 class DATA:
     def __init__(self, src, fun=None):
         self.rows = []
         self.cols = None
+
+    def new(cls, src, fun=None):
+        instance = cls()
+        if isinstance(src, str):
+            for x in cls.csv(src):
+                instance.add(x, fun)
+        else:
+            for x in (src or []):
+                instance.add(x, fun)
+        return instance
 
     def add(self, t, fun=None):
         row = t if isinstance(t, ROW) else ROW(t)
@@ -14,6 +25,15 @@ class DATA:
             self.rows.append(self.cols.add(row))
         else:
             self.cols = COLS(row)  
+
+    def coerce(s):
+        try: return ast.literal_eval(s)
+        except Exception: return s
+    def csv(file="-"):
+        with  fileinput.FileInput(None if file=="-" else file) as src:
+            for line in src:
+                line = re.sub(r'([\n\t\r"\' ]|#.*)', '', line)
+                if line: yield [coerce(x) for x in line.split(",")]
 
     # The following methods need the implementation of mid, div, small, and stats 
     # methods in the respective classes they are called on
