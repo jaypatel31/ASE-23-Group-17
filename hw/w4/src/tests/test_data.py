@@ -33,5 +33,47 @@ class TestDATA(unittest.TestCase):
         self.assertEqual(len(data.rows), 3)
         self.assertIsInstance(data.rows[0], ROW)
 
+    # def test_basic_split(self):
+    #     # Define the inputs
+    #     best = "feature1"
+    #     rest = ["feature2", "feature3"]
+    #     lite = []  # Lite dataset (not used in the split function)
+    #     dark = [ROW(), ROW(), ROW()]  # Dark dataset with rows
+
+    #     # Call the split function
+    #     index, selected = DATA.split(best, rest, lite, dark)
+
+    #     # Assert the expected output
+    #     self.assertEqual(index, 0)
+    #     self.assertEqual(selected, expected_selected)
+
+    def test_no_dark_rows(self):
+        # Define the inputs
+        best = "feature1"
+        rest = ["feature2", "feature3"]
+        lite = []  # Lite dataset (not used in the split function)
+        dark = []  # Empty dark dataset
+
+        # Call the split function
+        index, selected = split(best, rest, lite, dark)
+
+        # Assert the expected output
+        self.assertEqual(index, 1)
+        self.assertEqual(len(selected), 0)
+
+    def test_max_value_at_beginning(self):
+        # Define the inputs
+        best = "feature1"
+        rest = ["feature2", "feature3"]
+        lite = []  # Lite dataset (not used in the split function)
+        dark = [ROW(0), ROW(0), ROW(0)]  # Dark dataset with rows
+
+        # Call the split function
+        index, selected = split(best, rest, lite, dark)
+
+        # Assert the expected output
+        self.assertEqual(index, 0)
+        self.assertEqual(selected, dark[0])
+
 if __name__ == '__main__':
     unittest.main()
