@@ -5,6 +5,9 @@ import re,ast,fileinput
 from DATA import DATA
 from load import naive
 from ascii_table import display
+import random
+import time
+
 def help():
     print("OPTIONS:")
     print("  -c --cohen    small effect size               = .35")
@@ -45,6 +48,23 @@ def csv(file="-"):
     for line in src:
       line = re.sub(r'([\n\t\r"\' ]|#.*)', '', line)
       if line: yield [coerce(x) for x in line.split(",")]
+
+def rnd(n, ndecs=2):
+    if not isinstance(n, (int, float)):
+        return n
+    return round(n, ndecs)
+
+def gate20(d=None, stats=None, bests=None, stat=None, best=None):
+    print("#best, mid")
+    seed_values = [6912, 4561, 7895, 3212, 6543, 9877, 1351, 2468, 5799, 3572, 4681, 1593, 7536, 8520, 1474, 2585, 3698, 6542, 3213, 9874]
+    for i in range(20):
+        random.seed(seed_values[i])
+        d = DATA(0)
+        for row in csv(the["file"]):
+            d.add(row)
+        stats, bests = d.gate(4, 16, 0.5)
+        stat, best = stats[-1], bests[-1]
+        print(rnd(best.d2h(d)), rnd(stat.d2h(d)))
 
 def dstats():
     # Load Data
@@ -90,5 +110,6 @@ def main():
     # print(the)
 
 if __name__ == '__main__':
-    main()        
+    # main()
+    gate20()  
 

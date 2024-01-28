@@ -1,6 +1,7 @@
 from ROW import ROW
 from COLS import COLS
 import re,ast,fileinput
+import random
 
 class DATA:
     def __init__(self, src, fun=None):
@@ -56,18 +57,53 @@ class DATA:
             u[col.txt] = round(float(col.mid()), ndivs) if isinstance(col.mid(), (int, float)) else col.mid()
         return u
 
-    def best_rest(self, rows, want, best, rest, top):
+    def gate(self, budget0, budget, some):
+        stats = []
+        bests = []
+        rows = self.rows[:]  # Copying the list
+        random.shuffle(rows)
+        
+        print("1. top6", [example.cells[5:8] for example in rows[:6]])
+        print("2. top50", [example.cells[5:8] for example in rows[:50]])
+        rows.sort(key=lambda row: row.d2h(self))
+        print("3. most", rows[1].cells[5:8])
+
+        random.shuffle(rows)
+
+        lite = rows[:budget0]
+        dark = rows[budget0:]
+
+        for i in range(budget):
+            best, rest = self.bestRest(lite, len(lite) ** some)
+            todo, selected = self.split(best, rest, lite, dark)
+            # print("4: rand", y values of centroid of (from DARK, select BUDGET0+i rows at random))
+            print("5: mid:", selected.mid().cells[5:8])
+            print("6: top:",best.rows[1].cells[5:8] )
+            stats.append(selected.mid())
+            bests.append(best.rows[1])
+            lite.append(dark.pop(todo))
+        return stats, bests
+
+    def bestRest(self, rows, want, best=None, rest=None, top=None):
             rows.sort(key=lambda row: row.d2h(self))
-            best, rest = [self.cols['names']], [self.cols['names']]
+
+            best, rest = [self.cols.names], [self.cols.names]
             for i, row in enumerate(rows):
                 if i < want:
                     best.append(row)
                 else:
                     rest.append(row)
-            return  DATA.new(best), DATA.new(rest)
+            d1 = DATA(0)
+            d2 = DATA(0)
+            for row in best:
+                d1.add(row)
+            for row in rest:
+                d2.add(row)
+            return  d1, d2
     
     def split(self, best, rest, lite, dark):
-        selected = DATA({self.cols.names})
+        selected = DATA(0)
+        selected.add(self.cols.names)
         max_val = 1E30
         out = 1
 
