@@ -110,6 +110,7 @@ class DATA:
             return  d1, d2
     
     def split(self, best, rest, lite, dark):
+        # print("a",best.rows[0].cells,"b", rest,"c", lite,"d", dark)
         selected = DATA(0)
         selected.add(self.cols.names)
         max_val = 1E30
@@ -125,6 +126,5 @@ class DATA:
 
             if tmp > max_val:
                 out, max_val = i, tmp
-
         return out, selected
 

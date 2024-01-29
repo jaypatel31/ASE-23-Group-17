@@ -109,6 +109,8 @@ def main():
                 display()
                 print("Task 2:")
                 naive()
+            elif(arg=="gate20"):
+                gate20()
             else: test(arg)
             option_details = ""
             next_value = False
@@ -128,4 +130,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    # gate20()
