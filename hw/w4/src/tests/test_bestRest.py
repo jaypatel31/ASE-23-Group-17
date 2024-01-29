@@ -3,7 +3,7 @@ from DATA import DATA
 from ROW import ROW
 from COLS import COLS
 
-class TestDATA(unittest.TestCase):
+class TestBEST(unittest.TestCase):
     def test_bestRest(self):
         # Step 1: Setup Test Data
         data = DATA([])

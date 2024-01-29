@@ -12,6 +12,8 @@ from tests.test_sym import TestSYM
 from tests.test_cols import TestCOLS
 from tests.test_data import TestDATA
 from tests.test_load import TestLoad
+from tests.test_bestRest import TestBEST
+from tests.test_split import TestSplitMethod
 
 def run_tests(test_name):
     suiteNUM = unittest.TestLoader().loadTestsFromTestCase(TestNUM)
@@ -19,9 +21,11 @@ def run_tests(test_name):
     suiteCOL = unittest.TestLoader().loadTestsFromTestCase(TestCOLS)
     suiteDATA = unittest.TestLoader().loadTestsFromTestCase(TestDATA)
     suiteLOAD = unittest.TestLoader().loadTestsFromTestCase(TestLoad)
+    suiteBEST = unittest.TestLoader().loadTestsFromTestCase(TestBEST)
+    suiteSPLIT = unittest.TestLoader().loadTestsFromTestCase(TestSplitMethod)
 
-    suite = unittest.TestSuite([suiteNUM, suiteSYM, suiteDATA, suiteCOL,suiteLOAD])
-    suite_all = unittest.TestSuite([suiteNUM, suiteSYM, suiteDATA, suiteCOL,suiteLOAD])
+    suite = unittest.TestSuite([suiteNUM, suiteSYM, suiteDATA, suiteCOL,suiteLOAD,suiteBEST,suiteSPLIT])
+    suite_all = unittest.TestSuite([suiteNUM, suiteSYM, suiteDATA, suiteCOL,suiteLOAD,suiteBEST,suiteSPLIT])
 
 
     if "all" in test_name:

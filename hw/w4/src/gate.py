@@ -54,17 +54,34 @@ def rnd(n, ndecs=2):
         return n
     return round(n, ndecs)
 
+def calculate_ranges(data):
+    # Transpose the list of lists to get columns
+    columns = list(zip(*data))
+    
+    # Calculate range for each column
+    ranges = [(min(col), max(col)) for col in columns]
+    
+    ranges_string = ",".join([f"({max_val},{min_val})" for max_val, min_val in ranges])
+    
+    return "[" + ranges_string + "]"
+
 def gate20(d=None, stats=None, bests=None, stat=None, best=None):
     print("#best, mid")
-    seed_values = [6912, 4561, 7895, 3212, 6543, 9877, 1351, 2468, 5799, 3572, 4681, 1593, 7536, 8520, 1474, 2585, 3698, 6542, 3213, 9874]
+    print_statements = [[],[],[],[],[],[]]
     for i in range(20):
-        random.seed(seed_values[i])
+        random.seed(10*i)
         d = DATA(0)
         for row in csv(the["file"]):
             d.add(row)
-        stats, bests = d.gate(4, 16, 0.5)
+        stats, bests = d.gate(4, 16, 0.5,print_statements)
         stat, best = stats[-1], bests[-1]
         print(rnd(best.d2h(d)), rnd(stat.d2h(d)))
+    for statement in print_statements:
+        for st in statement:
+            print(st)
+            # rg = calculate_ranges(st)
+            # print(str(rg))
+            # return
 
 def dstats():
     # Load Data
@@ -110,6 +127,5 @@ def main():
     # print(the)
 
 if __name__ == '__main__':
-    # main()
-    gate20()  
-
+    main()
+    # gate20()

@@ -1,5 +1,6 @@
 import math
 from config import the
+import re
 
 # Numerics
 class NUM:
@@ -11,7 +12,7 @@ class NUM:
         self.m2 = 0
         self.hi = -1E30
         self.lo = 1E30
-        self.heaven = (s or "").find("-$") and 0 or 1
+        self.heaven = 0 if re.search(r"-$", s or "") else 1
 
     def add(self, x):
         if x != "?":

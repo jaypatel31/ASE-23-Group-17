@@ -57,16 +57,16 @@ class DATA:
             u[col.txt] = round(float(col.mid()), ndivs) if isinstance(col.mid(), (int, float)) else col.mid()
         return u
 
-    def gate(self, budget0, budget, some):
+    def gate(self, budget0, budget, some,print_statements):
         stats = []
         bests = []
         rows = self.rows[:]  # Copying the list
         random.shuffle(rows)
         
-        print("1. top6", [example.cells[5:8] for example in rows[:6]])
-        print("2. top50", [example.cells[5:8] for example in rows[:50]])
+        print_statements[0].append("1. top6: "+ str([example.cells[5:8] for example in rows[:6]]))
+        print_statements[1].append("2. top50: "+ str([example.cells[5:8] for example in rows[:50]]))
         rows.sort(key=lambda row: row.d2h(self))
-        print("3. most", rows[1].cells[5:8])
+        print_statements[2].append("3. most: "+ str(rows[0].cells[5:8]))
 
         random.shuffle(rows)
 
@@ -75,18 +75,26 @@ class DATA:
 
         for i in range(budget):
             best, rest = self.bestRest(lite, len(lite) ** some)
+
             todo, selected = self.split(best, rest, lite, dark)
-            # print("4: rand", y values of centroid of (from DARK, select BUDGET0+i rows at random))
-            print("5: mid:", selected.mid().cells[5:8])
-            print("6: top:",best.rows[1].cells[5:8] )
+
+            selected_dark_rows = random.sample(dark, budget0 + i)
+            centroid_dark_y_values = [row.cells[5:8] for row in selected_dark_rows]  # Assuming rows contain cells attribute
+            centroid_dark = [sum(col) / len(col) for col in zip(*centroid_dark_y_values)]
+        
+            print_statements[3].append("4: rand: "+ str(centroid_dark))
+            
+            centroid_selected_y_values = [row.cells[5:8] for row in selected.rows]
+            centroid_selected = [sum(col) / len(col) for col in zip(*centroid_selected_y_values)]
+            print_statements[4].append("5: mid: "+ str(centroid_selected))
+            print_statements[5].append("6: top: "+ str(best.rows[0].cells[5:8]) )
             stats.append(selected.mid())
-            bests.append(best.rows[1])
+            bests.append(best.rows[0])
             lite.append(dark.pop(todo))
         return stats, bests
 
     def bestRest(self, rows, want, best=None, rest=None, top=None):
             rows.sort(key=lambda row: row.d2h(self))
-
             best, rest = [self.cols.names], [self.cols.names]
             for i, row in enumerate(rows):
                 if i < want:
@@ -110,7 +118,6 @@ class DATA:
         for i, row in enumerate(dark):
             b = row.like(best, len(lite), 2)
             r = row.like(rest, len(lite), 2)
-            
             if b > r:
                 selected.add(row)
 
