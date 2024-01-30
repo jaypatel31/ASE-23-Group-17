@@ -65,23 +65,49 @@ def calculate_ranges(data):
     
     return "[" + ranges_string + "]"
 
+def calculate_column_averages(data):
+    num_columns = len(data[0])  # Assuming all inner lists have the same length
+    num_rows = len(data)
+
+    # Initialize sums for each column
+    column_sums = [0] * num_columns
+
+    # Iterate over each row and update column sums
+    for row in data:
+        for i in range(num_columns):
+            if(len(row)>0): column_sums[i] += row[i]
+
+    # Calculate averages for each column
+    column_averages = [round(sum_column / num_rows,2) for sum_column in column_sums]
+
+    return column_averages
+
 def gate20(d=None, stats=None, bests=None, stat=None, best=None):
     print("#best, mid")
-    print_statements = [[],[],[],[],[],[]]
+    print_statements = [{"st":"1. top6","data":[]},{"st":"2. top50","data":[]},{"st":"3. most","data":[]},{"st":"4. rand","data":[]},{"st":"5. mid","data":[]},{"st":"6. top","data":[]}]
     for i in range(20):
-        random.seed(10*i)
+        random.seed(20*i)
         d = DATA(0)
         for row in csv(the["file"]):
             d.add(row)
-        stats, bests = d.gate(4, 16, 0.5,print_statements)
+        stats, bests = d.gate(4, 16, 0.5,print_statements,i)
         stat, best = stats[-1], bests[-1]
         print(rnd(best.d2h(d)), rnd(stat.d2h(d)))
     for statement in print_statements:
-        for st in statement:
-            print(st)
-            # rg = calculate_ranges(st)
-            # print(str(rg))
-            # return
+        # print(statement)
+        for idx, dataset in enumerate(statement['data']):
+            print(f"{statement['st']}:")
+            print(dataset)
+
+            # For Average
+            # if(statement['st'] != "3. most"):
+            #     averages = calculate_column_averages(dataset)
+            #     print(f"{statement['st']} Average:")
+            #     print(averages)
+            # else:
+            #     print(f"{statement['st']}:")
+            #     print(dataset)
+        # return
 
 def dstats():
     # Load Data
