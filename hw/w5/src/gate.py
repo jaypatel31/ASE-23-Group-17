@@ -153,6 +153,23 @@ def main():
             sys.exit(0)
 
     # print(the)
+            
+def o(t, n=None):
+    return "{" + ", ".join(map(str, t)) + "}"
+            
+def dist():
+    d = DATA(0)
+    for row in csv("././data/auto93.csv"): 
+        d.add(row)
+    
+    
+    r1 = d.rows[0]
+    # print(r1.cells)
+    rows = r1.neighbors(d)
+    for i, row in enumerate(rows):
+        if i % 30 == 0:
+            print(i+1, o(row.cells), rnd(row.dist(r1, d)))
 
 if __name__ == '__main__':
-    main()
+    dist()
+    # main()

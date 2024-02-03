@@ -146,6 +146,6 @@ def naive():
 data1 = {}
 data2 = {}   
 if __name__ == '__main__':
-   
+   # dist()
    naive()
    

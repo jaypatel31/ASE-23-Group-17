@@ -37,7 +37,7 @@ class SYM:
             return ((self.has.get(x, 0) or 0) + the.m * prior)
         return ((self.has.get(x, 0) or 0) + the.m * prior) / (self.n + the.m)
 
-    def dist(x, y):
+    def dist(self, x, y):
         return 1 if x == "?" and y == "?" else 0 if x == y else 1
 
 
