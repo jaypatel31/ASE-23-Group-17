@@ -137,6 +137,8 @@ def main():
                 naive()
             elif(arg=="gate20"):
                 gate20()
+            elif(arg=="dist"):
+                dist()
             else: test(arg)
             option_details = ""
             next_value = False
@@ -171,5 +173,4 @@ def dist():
             print(i+1, o(row.cells), rnd(row.dist(r1, d)))
 
 if __name__ == '__main__':
-    dist()
-    # main()
+    main()
