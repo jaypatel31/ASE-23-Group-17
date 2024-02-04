@@ -33,6 +33,21 @@ class TestNUM(unittest.TestCase):
                 likelihood = self.num_instance.like(x,0,0)
         
         self.assertAlmostEqual(likelihood, expected_value)
+    
+    def test_x_question_mark(self):
+        # Test when x is "?" and y is a valid value
+        x = "?"
+        y = 0.3
+        expected_distance = 1.3  # Assuming self.norm(0.3) returns 0.3
+        self.assertEqual((round(self.num_instance.dist(x, y),1)), expected_distance)
+
+    def test_y_question_mark(self):
+        # Test when y is "?" and x is a valid value
+        x = 0.8
+        y = "?"
+        expected_distance = 1.2  # Assuming self.norm(0.8) returns 0.8
+        self.assertEqual(self.num_instance.dist(x, y), expected_distance)
+
 
 if __name__ == '__main__':
     unittest.main()

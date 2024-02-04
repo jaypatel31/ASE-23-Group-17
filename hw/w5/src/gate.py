@@ -138,7 +138,11 @@ def main():
             elif(arg=="gate20"):
                 gate20()
             elif(arg=="dist"):
+                print("Task 1: Get Distance Working: \n")
                 dist()
+            elif(arg=="far"):
+                print("Task 2: Get Far Working: \n")
+                far()
             else: test(arg)
             option_details = ""
             next_value = False
@@ -198,8 +202,5 @@ def far():
     print(o(a), o(b), f"distance = {round(C,4)}", f"Attempts: {attempts}",sep='\n')
 
 if __name__ == '__main__':
-    # main()
-    print("Task 1: Get Distance Working: \n")
-    dist()
-    print("Task 2: Get Far Working: \n")
-    far()
+    main()
+

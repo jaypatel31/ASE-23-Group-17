@@ -64,6 +64,20 @@ class TestSYM(unittest.TestCase):
         
         expected = round((1 + 2 * 0.6) / (1 + 2),1)    
         self.assertAlmostEqual(likelihood, expected)
+    
+    def test_same_values(self):
+        # Test when both x and y are the same
+        x = "a"
+        y = "a"
+        expected_distance = 0
+        self.assertEqual(self.sym_instance.dist(x, y), expected_distance)
+
+    def test_different_values(self):
+        # Test when x and y are different
+        x = "a"
+        y = "b"
+        expected_distance = 1
+        self.assertEqual(self.sym_instance.dist(x, y), expected_distance)
 
 if __name__ == '__main__':
     unittest.main()
