@@ -166,7 +166,6 @@ def dist():
     
     
     r1 = d.rows[0]
-    # print(r1.cells)
     rows = r1.neighbors(d)
     for i, row in enumerate(rows):
         if i % 30 == 0:
@@ -178,7 +177,9 @@ def far():
     for row in csv("././data/auto93.csv"):  # Load the dataset
         d.add(row)
 
-    target_distance = 0.89
+
+    a, b, C, eval = d.farapart(d.rows)
+    target_distance = 0.95
     current_distance = 0
     attempts = 0
     max_attempts = 1000  # Prevent infinite loops
@@ -186,16 +187,19 @@ def far():
     #print(total_rows)
 
     while abs(current_distance - target_distance) > 0.01 and attempts < max_attempts:
-        sampled_rows = random.sample(d.rows, total_rows)  # Sample without replacement
-        a, b, C, _ = d.farapart(sampled_rows)
+        # sampled_rows = random.sample(d.rows, total_rows)  # Sample without replacement
+        a, b, C, _ = d.farapart(d.rows)
         current_distance = C
         attempts += 1
         
     if attempts == max_attempts:
         print("Failed to find rows with the desired distance after maximum attempts.")
     
-    print(o(a), o(b), C, sep='\n')
+    print(o(a), o(b), f"distance = {round(C,4)}", f"Attempts: {attempts}",sep='\n')
 
 if __name__ == '__main__':
-    main()
+    # main()
+    print("Task 1: Get Distance Working: \n")
+    dist()
+    print("Task 2: Get Far Working: \n")
     far()

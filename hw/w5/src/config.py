@@ -7,11 +7,11 @@ OPTIONS:
   -d --d      frist cut                       = 32
   -D --D      second cut                      = 4
   -f --file   csv data file name              = ../data/diabetes.csv
-  -F --Far    how far to search for faraway?  = .95
+  -F --Far    how far to search for faraway?  = 1
   -h --help   show help                       = false
   -H --Half   #items to use in clustering     = 256
   -p --p      weights for distance            = 2
-  -s --seed   random number seed              = 31210
+  -s --seed   random number seed              = 100
   -S --Support coeffecient on best            = 2
   -t --todo   start up action                 = help
 """

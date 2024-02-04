@@ -133,19 +133,15 @@ class DATA:
             if tmp > max_val:
                 out, max_val = i, tmp
         return out, selected
-
-    def farapart(self, rows, sortp=False, a=None):
-        far = int(len(rows) * the.Far)  # Assuming 'the.Far' is a predefined ratio
-        evals = 1 if a else 2
+    
+    def farapart(self, rows, sortp=None, a=None, b=None, far=None, evals=None):
+        far = int(len(rows) * the.Far) - 1
         
-        if a is None:
-            # Assuming 'l.any(rows)' selects a random or specific element from 'rows'
-            # In Python, you might use 'random.choice(rows)' or a specific selection logic
-            a = random.choice(rows).neighbors(self, rows)[far]
+        evals = 1 if a else 2
+        # a = ROW([4, 97, 88, 72, 3, 2100, 16.5, 30])
+        a = a or random.choice(rows).neighbors(self, rows)[far]
+        # print(far)
         b = a.neighbors(self, rows)[far]
         if sortp and b.d2h(self) < a.d2h(self):
             a, b = b, a
-        # Assuming 'a.dist(b, self)' calculates the distance between 'a' and 'b'
-        # You might need to implement 'dist' method in the appropriate class
-        distance = a.dist(b, self)
-        return a, b, distance, evals
+        return a, b, a.dist(b, self), evals

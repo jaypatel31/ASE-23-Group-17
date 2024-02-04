@@ -50,9 +50,9 @@ class ROW:
 
     def neighbors(self, data, rows=None):
         rows = rows or data.rows
-        return sorted(rows, key=lambda row: self.dist(row, data))
+        return self.keysort(rows, lambda row: self.dist(row, data))
     
-    def keysort(t, fun):
+    def keysort(self,t, fun):
         u = [{"x": x, "y": fun(x)} for x in t]  # Decorate
         u.sort(key=lambda item: item["y"])  # Sort
         v = [item["x"] for item in u]  # Undecorate
