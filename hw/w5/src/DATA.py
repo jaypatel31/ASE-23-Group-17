@@ -2,6 +2,7 @@ from ROW import ROW
 from COLS import COLS
 import re,ast,fileinput
 import random
+from config import the
 
 class DATA:
     def __init__(self, src, fun=None):
@@ -133,3 +134,18 @@ class DATA:
                 out, max_val = i, tmp
         return out, selected
 
+    def farapart(self, rows, sortp=False, a=None):
+        far = int(len(rows) * the.Far)  # Assuming 'the.Far' is a predefined ratio
+        evals = 1 if a else 2
+        
+        if a is None:
+            # Assuming 'l.any(rows)' selects a random or specific element from 'rows'
+            # In Python, you might use 'random.choice(rows)' or a specific selection logic
+            a = random.choice(rows).neighbors(self, rows)[far]
+        b = a.neighbors(self, rows)[far]
+        if sortp and b.d2h(self) < a.d2h(self):
+            a, b = b, a
+        # Assuming 'a.dist(b, self)' calculates the distance between 'a' and 'b'
+        # You might need to implement 'dist' method in the appropriate class
+        distance = a.dist(b, self)
+        return a, b, distance, evals
