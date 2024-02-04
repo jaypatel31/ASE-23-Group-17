@@ -172,5 +172,30 @@ def dist():
         if i % 30 == 0:
             print(i+1, o(row.cells), rnd(row.dist(r1, d)))
 
+def far():
+
+    d = DATA(0)
+    for row in csv("././data/auto93.csv"):  # Load the dataset
+        d.add(row)
+
+    target_distance = 0.89
+    current_distance = 0
+    attempts = 0
+    max_attempts = 1000  # Prevent infinite loops
+    total_rows = len(d.rows)
+    #print(total_rows)
+
+    while abs(current_distance - target_distance) > 0.01 and attempts < max_attempts:
+        sampled_rows = random.sample(d.rows, total_rows)  # Sample without replacement
+        a, b, C, _ = d.farapart(sampled_rows)
+        current_distance = C
+        attempts += 1
+        
+    if attempts == max_attempts:
+        print("Failed to find rows with the desired distance after maximum attempts.")
+    
+    print(o(a), o(b), C, sep='\n')
+
 if __name__ == '__main__':
     main()
+    far()
