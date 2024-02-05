@@ -11,24 +11,7 @@ In summary, the results firmly demonstrate that SMO exhibits lower lbs and highe
 
 # Answer 2
 
-For row evaluations required for print statement 3, we need to analyze the code block related to print statement 3:
-
-```python
-rows.sort(key=lambda row: row.d2h(self))
-print_statements[2].append("3. most: "+ str(rows[0].cells[5:8]))
-```
-
-In this block, the `rows` list is sorted based on the `d2h` attribute of each row object, with `d2h` being a function of the row and `self`. After sorting, the first row's cells from index 5 to 7 are appended to `print_statements[2]`.
-
-Here's the breakdown of row evaluations for print statement 3:
-
-1. **Sorting Rows**: Sorting requires comparing elements, and in this case, it uses the `d2h` function as the key. So, it requires `len(rows) * log(len(rows))` evaluations in the worst case, assuming a comparison-based sorting algorithm like Timsort used in Python.
-
-2. **Appending to Print Statement**: Once the rows are sorted, the first row's cells from index 5 to 7 are accessed and appended to the `print_statements[2]`. This operation requires constant time.
-
-Therefore, for print statement 3, the number of row evaluations required is primarily determined by the sorting operation, which is approximately `len(rows) * log(len(rows))` evaluations.
-
-Keep in mind that the actual number of row evaluations may vary based on the implementation details of the `d2h` function and the size of the `rows` list.
+For every Print 3 statements to be printed, we have to find the value which is closest to heaven or minimum d2h value from the entire dataset. And to evaluate that value we need to look at all the y rows present in the data, which are 398 in the auto93.csv file.
 
 # Answer 3
 
