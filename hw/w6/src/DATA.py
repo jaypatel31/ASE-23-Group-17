@@ -3,6 +3,7 @@ from COLS import COLS
 import re,ast,fileinput
 import random
 from config import the
+from NODE import NODE
 
 class DATA:
     def __init__(self, src, fun=None):
@@ -51,9 +52,17 @@ class DATA:
         u = [col.small() for col in self.cols.all]
         return ROW(u)
 
-    def stats(self, cols=None, fun=None, ndivs=2):
+    def stats(self, cols=None, fun=None, callback=None, ndivs=None, u=None):
         u = {".N": len(self.rows)}
         col_name = cols if cols else self.cols.all
+        # avg = 0
+        # for row in self.rows:
+        #     avg += row.cells[5]
+
+        # print(avg/len(self.rows))
+        
+        # print("---------")
+
         for col in (col_name):
             u[col.txt] = round(float(col.mid()), ndivs) if isinstance(col.mid(), (int, float)) else col.mid()
         return u
@@ -135,47 +144,89 @@ class DATA:
         return out, selected
     
     def farapart(self, rows, sortp=None, a=None, b=None, far=None, evals=None):
-        far = int(len(rows) * the.Far) - 1
+        far = int(len(rows) * the.Far)
         
         evals = 1 if a else 2
         # a = ROW([4, 97, 88, 72, 3, 2100, 16.5, 30])
         a = a or random.choice(rows).neighbors(self, rows)[far]
         # print(far)
         b = a.neighbors(self, rows)[far]
+
+        
+
         if sortp and b.d2h(self) < a.d2h(self):
             a, b = b, a
         return a, b, a.dist(b, self), evals
-
-    def clone(self, rows):
-        new = DATA([])
+    
+    def many(self, t, n=None):
+        if n is None:
+            n = len(t)
+        return [random.choice(t) for _ in range(n)]
+    
+    def clone(self, rows=None, new=None):
+        new = DATA(0)
         new.cols = self.cols
-        for row in rows:
-            new.add(row)
+        # print(self.cols.names.cells)
+        new.cols = COLS(ROW(self.cols.names.cells))
+        for row in (rows or []):
+            new.add(row.cells)
         return new
 
-    def half(self, rows, sortp=True, before=None):
-        from gate import many
+    def keysort(self, t, fun):
+        u = [(x, fun(x)) for x in t]  # decorate
+        u.sort(key=lambda xy: xy[1])  # sort
+        v = [xy[0] for xy in u]  # undecorate
+        return v
 
-        # Assuming implementation of many, farapart, and keysort functions
-        some = many(rows, min(the.Half, len(rows)))
-        a, b, C, evals = self.farapart(some, sortp, before)
-        d = lambda row1, row2: row1.dist(row2, self)
-        project = lambda r: (d(r, a) ** 2 + C ** 2 - d(r, b) ** 2) / (2 * C)
-        rows.sort(key=project)
-        mid_point = len(rows) // 2
-        as_, bs = rows[:mid_point], rows[mid_point:]
-        return as_, bs, a, b, C, d(a, bs[0]), evals
+    def half(self, rows=None,sortp=None,before=None,evals=None):
+        evals = [0]  # Using a list to make evals mutable inside nested functions
 
-    def branch(self, stop=None):
+        some = self.many(rows, min(the.Half, len(rows)))
+        a, b, C, evals[0] = self.farapart(some, sortp, before)
+
+
+        def d(row1, row2):
+            return row1.dist(row2, self)
+
+        def project(r):
+            return ((d(r,a)**2 + C**2 - d(r,b)**2) / (2*C))
+        
+
+        as_, bs = [], []
+        for n, row in enumerate(self.keysort(rows, project)):
+            if n <= (len(rows) // 2):
+                as_.append(row)
+            else:
+                bs.append(row)
+
+        return as_, bs, a, b, C, d(a, bs[0]), evals[0]
+    
+    def tree(self, sortp=None):
+        evals = [0]  # Using a list to make evals mutable inside nested functions
+
+        def _tree(data, above=None):
+            node = NODE(data)
+            if len(data.rows) > 2 * (len(self.rows) ** 0.5):
+                lefts, rights, node.left, node.right, node.C, node.cut, evals1 = self.half(data.rows, sortp, above)
+                evals[0] += evals1
+                node.lefts = _tree(self.clone(lefts), node.left)
+                node.rights = _tree(self.clone(rights), node.right)
+            return node
+
+        return _tree(self), evals[0]
+    
+    def branch(self, stop=None,rest=None,_branch=None,evals=None):
         evals, rest = 1, []
         stop = stop or int(2 * (len(self.rows) ** 0.5))
-        def _branch(data, above=None, left=None, lefts=None, rights=None):
+
+        def _branch(data, above=None):
             nonlocal evals
             if len(data.rows) > stop:
-                lefts, rights, left, b, C, distance_from_a_to_bs, evals = data.half(data.rows, True, above)
+                lefts, rights, left, b, C, distance_from_a_to_bs, _ = self.half(data.rows, True, above)
                 evals += 1
-                rest.extend(rights)
-                return _branch(data.clone(lefts), left)
+                for row1 in rights:
+                    rest.append(row1)
+                return _branch(self.clone(lefts), left)
             else:
-                return data.clone(data.rows), data.clone(rest), evals
+                return self.clone(data.rows), self.clone(rest), evals
         return _branch(self)

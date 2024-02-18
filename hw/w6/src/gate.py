@@ -202,22 +202,61 @@ def far():
     print(o(a), o(b), f"distance = {round(C,4)}", f"Attempts: {attempts}",sep='\n')
 
 def eg_branch():
-    d = DATA("../data/auto93.csv")
+    print("Task-2: ")
+    d = DATA(0)
+    for row in csv("././data/auto93.csv"):  # Load the dataset
+        d.add(row)
     best, rest, evals = d.branch()
-    print(best.mid().cells, rest.mid().cells, evals)
+    print("centroid of output cluster:")
+    print(o(best.mid().cells,2))
+    print(evals)
 
 def eg_doubletap():
-    d = DATA("../data/auto93.csv")
+    print("Task-3: ")
+    d = DATA(0)
+    for row in csv("././data/auto93.csv"):  # Load the dataset
+        d.add(row)
     best1, rest, evals1 = d.branch(32)
     best2, _, evals2 = best1.branch(4)
-    print(best2.mid().cells, rest.mid().cells, evals1 + evals2)
+    print(o(best2.mid().cells,2), o(rest.mid().cells,2))
+    print(evals1 + evals2)
 
 def many(t, n=None):
     if n is None:
         n = len(t)
     return [random.choice(t) for _ in range(n)]
 
+def o(t, n=None, u=None):
+        if isinstance(t, (int, float)):
+            return str(round(t, n))
+        if not isinstance(t, dict) and not isinstance(t, list):
+            return str(t)
+
+        u = []
+        for k, v in t.items() if isinstance(t, dict) else enumerate(t):
+            if str(k)[0] != "_":
+                if len(t) > 0:
+                    u.append(o(v, n))
+                else:
+                    u.append(f"${o(k, n)}: ${o(v, n)}")
+
+        return "{" + ", ".join(u) + "}"
+
+
+def tree(t=None, evals=None):
+    d = DATA(0)
+    print("Task-1: ")
+    for row in csv("././data/auto93.csv"):  # Load the dataset
+        d.add(row)
+    t, evals = d.tree(True)
+    t.show()
+    print(evals)
 
 if __name__ == '__main__':
-    main()
+    tree()
+    print("")
+    eg_branch()
+    print("")
+    eg_doubletap()
+    # main()
 

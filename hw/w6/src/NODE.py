@@ -1,17 +1,31 @@
 from ROW import ROW
+import math
 
 class NODE:
     def __init__(self, data, lefts=None, rights=None):
         self.here = data
-        self.lefts = lefts
-        self.rights = rights
+        self.lefts = None
+        self.rights = None
+        self.left = None
+        self.right = None
+        self.C = None
+        self.cut = None
+    
+    def new(data):
+        return NODE(data)
 
-    def rnd(n, ndecs=2):
+    def rnd(self, n, ndecs=2):
         if not isinstance(n, (int, float)):
             return n
-        return round(n, ndecs)
+
+        if math.floor(n) == n:
+            return n
+
+        mult = 10 ** (ndecs or 2)
+        return math.floor(n * mult + 0.5) / mult
 
     def walk(self, fun, depth=0):
+        self.depth = depth
         fun(self, depth, not (self.lefts or self.rights))
         if self.lefts:
             self.lefts.walk(fun, depth + 1)
@@ -19,19 +33,38 @@ class NODE:
             self.rights.walk(fun, depth + 1)
 
     def d2h(self, data):
-            return self.rnd(data.mid().d2h(self.here))
+        return round(data.mid().d2h(self.here))
+    
+    def o(self, t, n=None, u=None):
+        if isinstance(t, (int, float)):
+            return str(round(t, n))
+        if not isinstance(t, dict) and not isinstance(t, list):
+            return str(t)
+
+        u = []
+        for k, v in t.items() if isinstance(t, dict) else enumerate(t):
+            if str(k)[0] != "_":
+                if len(t) > 0:
+                    u.append(self.o(v, n))
+                else:
+                    u.append(f"${self.o(k, n)}: ${self.o(v, n)}")
+
+        return "{" + ", ".join(u) + "}"
     
     def show(self, max_depth=0):
+        
+        max_depth = 0
         def _show(node, depth, is_leaf):
+            nonlocal max_depth
             post = ""
             if is_leaf:
-                d2h_value = self.rnd(node.here.mid().d2h(self.here))
-                post = f"{d2h_value}\t{str(node.here.mid().cells)}"
-            nonlocal max_depth
+                post = f"\t{self.o(node.here.mid().cells,2)}"
+            else:
+                post = ""
             max_depth = max(max_depth, depth)
             print('|.. ' * depth + post)
 
         self.walk(_show)
         print("")
-        print("    " * max_depth, self.rnd(self.here.mid().d2h(self.here)), str(self.here.mid().cells))
-        print("    " * max_depth, "_", str(self.here.cols.names))
+        print("    " * max_depth,  self.o(self.here.mid().cells,2))
+        print("    " * max_depth, "_", str(self.here.cols.names.cells))
