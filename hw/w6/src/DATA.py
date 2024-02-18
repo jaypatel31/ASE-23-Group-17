@@ -145,3 +145,37 @@ class DATA:
         if sortp and b.d2h(self) < a.d2h(self):
             a, b = b, a
         return a, b, a.dist(b, self), evals
+
+    def clone(self, rows):
+        new = DATA([])
+        new.cols = self.cols
+        for row in rows:
+            new.add(row)
+        return new
+
+    def half(self, rows, sortp=True, before=None):
+        from gate import many
+
+        # Assuming implementation of many, farapart, and keysort functions
+        some = many(rows, min(the.Half, len(rows)))
+        a, b, C, evals = self.farapart(some, sortp, before)
+        d = lambda row1, row2: row1.dist(row2, self)
+        project = lambda r: (d(r, a) ** 2 + C ** 2 - d(r, b) ** 2) / (2 * C)
+        rows.sort(key=project)
+        mid_point = len(rows) // 2
+        as_, bs = rows[:mid_point], rows[mid_point:]
+        return as_, bs, a, b, C, d(a, bs[0]), evals
+
+    def branch(self, stop=None):
+        evals, rest = 1, []
+        stop = stop or int(2 * (len(self.rows) ** 0.5))
+        def _branch(data, above=None, left=None, lefts=None, rights=None):
+            nonlocal evals
+            if len(data.rows) > stop:
+                lefts, rights, left, b, C, distance_from_a_to_bs, evals = data.half(data.rows, True, above)
+                evals += 1
+                rest.extend(rights)
+                return _branch(data.clone(lefts), left)
+            else:
+                return data.clone(data.rows), data.clone(rest), evals
+        return _branch(self)
