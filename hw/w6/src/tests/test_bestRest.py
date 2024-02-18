@@ -38,6 +38,23 @@ class TestBEST(unittest.TestCase):
         self.assertEqual(best_data.rows, [])
         self.assertEqual(rest_data.rows, [])
 
+    def test_branch(self):
+        data = DATA([])
+        data.cols = COLS(ROW(['Age', 'name', 'Grade!']))  # Mocking COLS instance
+        test_row = [12, 'Jay', 32]
+        data.add(test_row)
+        test_row2 = [6, 'Jay', 12]
+        data.add(test_row2)
+        test_row3 = [6, 'Mihir', 12]
+        data.add(test_row3)
+
+        # Perform branching
+        stop_condition = 2  # Define a stopping condition for the branch
+        best, rest, evals = data.branch(stop=stop_condition)
+
+        # Assertions
+        self.assertTrue(len(best.rows) <= stop_condition, "Best subset exceeds stop condition")
+        self.assertTrue(len(rest.rows) <= stop_condition, "Rest subset exceeds stop condition")
 
         
 
