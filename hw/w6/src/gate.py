@@ -201,6 +201,23 @@ def far():
     
     print(o(a), o(b), f"distance = {round(C,4)}", f"Attempts: {attempts}",sep='\n')
 
+def eg_branch():
+    d = DATA("../data/auto93.csv")
+    best, rest, evals = d.branch()
+    print(best.mid().cells, rest.mid().cells, evals)
+
+def eg_doubletap():
+    d = DATA("../data/auto93.csv")
+    best1, rest, evals1 = d.branch(32)
+    best2, _, evals2 = best1.branch(4)
+    print(best2.mid().cells, rest.mid().cells, evals1 + evals2)
+
+def many(t, n=None):
+    if n is None:
+        n = len(t)
+    return [random.choice(t) for _ in range(n)]
+
+
 if __name__ == '__main__':
     main()
 
