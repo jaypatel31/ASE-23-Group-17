@@ -1,7 +1,7 @@
-# Week 5
+# Week 6
 
-We got the Distance and Far working.
+Outputs in form of clusters are generated.
 
-To get Distance working, we implemented neighbor and distance methods in ROW and the distance method in both NUM and SYM. Additionally, we added dist method in GATE.py that produces outpot that gives every 30th row and distance from that row to the first row.
+To get clusters working, we implemented the NODE.py file which has walk and show as methods which is responsible for creating nodes and finding the nearest node with distance using the d2h as distance to heaven. 
 
-To get Far working, we used the neighbor method in ROW and implemented farapart method in DATA. Additionally, we implemented far method in GATE.py which finds and prints two points that are 0.95 distance far from each other.
+We implemented the doubletap, tree and branch methods which are collectively responsible for generating the tree and performing Recursive Random Projections
