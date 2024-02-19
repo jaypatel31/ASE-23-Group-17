@@ -143,6 +143,12 @@ def main():
             elif(arg=="far"):
                 print("Task 2: Get Far Working: \n")
                 far()
+            elif(arg=="cluster"):
+                tree()
+                print("")
+                eg_branch()
+                print("")
+                eg_doubletap()
             else: test(arg)
             option_details = ""
             next_value = False
@@ -252,11 +258,6 @@ def tree(t=None, evals=None):
     t.show()
     print(evals)
 
-if __name__ == '__main__':
-    tree()
-    print("")
-    eg_branch()
-    print("")
-    eg_doubletap()
-    # main()
+if __name__ == '__main__': 
+    main()
 
