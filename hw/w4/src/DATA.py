@@ -51,7 +51,8 @@ class DATA:
         return ROW(u)
 
     def stats(self, cols=None, fun=None, ndivs=2):
-        u = {".N": len(self.rows)}
+        # u = {".N": len(self.rows)}
+        u = {}
         col_name = cols if cols else self.cols.all
         for col in (col_name):
             u[col.txt] = round(float(col.mid()), ndivs) if isinstance(col.mid(), (int, float)) else col.mid()

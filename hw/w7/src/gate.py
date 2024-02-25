@@ -246,7 +246,7 @@ def o(t, n=None, u=None):
                 else:
                     u.append(f"${o(k, n)}: ${o(v, n)}")
 
-        return "{" + ", ".join(u) + "}"
+        return "\t".join(u)
 
 
 # def tree(t=None, evals=None):
@@ -258,12 +258,36 @@ def o(t, n=None, u=None):
     # t.show()
     # print(evals)
 
+def details(d):
+    print(f"names\t\t {o(d.cols.names.cells)}\t D2h--")
+    print(f"mid\t\t {o(d.mid().cells,2)}\t {round(d.mid().d2h(d),2)}")
+    print(f"div\t\t {o(d.div().cells,2)}\t {round(d.div().d2h(d),2)}")
+
+def stats(d):
+    print(f"date: {time.strftime('%x %X')}")
+    print(f"file: {the['file']}")
+    print(f"repeats : 20")
+    print(f"seed: {the['seed']}")
+    print(f"rows: {len(d.rows)}")
+    print(f"cols: {len(d.cols.names.cells)}")
+
+
+def any50(d):
+    random.seed(the.seed)
+    rows = d.rows[:]  # Copying the list
+    random.shuffle(rows)
+    
+    for i in range(0, 50):
+        print(f"any50:\t\t {o(rows[i].cells,n=2)} \t {round(rows[i].d2h(d),2)}")
+
 if __name__ == '__main__': 
     # main()
     d = DATA(0)
-    print("Task-1: ")
-    for row in csv("././data/auto93.csv"):  # Load the dataset
+    for row in csv("././data/auto93.csv"): 
         d.add(row)
-    print(d.mid().cells)
-    print(d.div().cells)
+    stats(d)
+    print("#")
+    details(d)
+    print("#")
+    any50(d)
 

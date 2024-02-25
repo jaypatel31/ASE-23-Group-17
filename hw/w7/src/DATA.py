@@ -43,13 +43,11 @@ class DATA:
     def mid(self, cols=None):
         u = [col.mid() for col in (cols or self.cols.all)]
         r = ROW(u)
-        print(r.d2h(self))
         return r
 
     def div(self, cols=None):
         u = [col.div() for col in (cols or self.cols.all)]
         r = ROW(u)
-        print(r.d2h(self))
         return r
 
     def small(self):
