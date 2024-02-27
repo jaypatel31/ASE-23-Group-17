@@ -14,6 +14,8 @@ OPTIONS:
   -s --seed   random number seed              = 31210
   -S --Support coeffecient on best            = 2
   -t --todo   start up action                 = help
+  -k --k      low class frequency kludge      = 1
+  -m --m      low attribute frequency kludge  = 2
 """
 
 import re, ast

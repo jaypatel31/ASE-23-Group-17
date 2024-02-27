@@ -69,6 +69,48 @@ class DATA:
         for col in (col_name):
             u[col.txt] = round(float(col.div()), ndivs) if isinstance(col.div(), (int, float)) else col.div()
         return u
+      
+      
+    def o(self,t, n=None, u=None):
+        if isinstance(t, (int, float)):
+            return str(round(t, n))
+        if not isinstance(t, dict) and not isinstance(t, list):
+            return str(t)
+
+        u = []
+        for k, v in t.items() if isinstance(t, dict) else enumerate(t):
+            if str(k)[0] != "_":
+                if len(t) > 0:
+                    u.append(self.o(v, n))
+                else:
+                    u.append(f"${self.o(k, n)}: ${self.o(v, n)}")
+
+        return "\t".join(u)
+      
+    
+    def smo9(self,budget0, budget, some):
+      stats = []
+      bests = []
+      rows = self.rows[:]
+    
+      for i in range(4):
+        random.seed(20*(i+1))
+        the.seed = 20*(i+1)
+        random.shuffle(rows)
+        lite = rows[0:budget0]
+        dark = rows[budget0:]
+        
+        for i in range(budget):
+          best, rest = self.bestRest(lite, len(lite) ** some)
+          todo, selected = self.split(best, rest, lite, dark)
+          
+          stats.append(selected.mid())
+          bests.append(best.rows[0])
+          lite.append(dark.pop(todo))
+          print(f"smo{budget+budget0}:\t\t {self.o(best.rows[0].cells,2)} \t {round(best.rows[0].d2h(self),2)}")
+      return stats, bests
+          
+      
 
     def gate(self, budget0, budget, some,print_statements,itr):
         stats = []

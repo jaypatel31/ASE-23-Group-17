@@ -279,15 +279,32 @@ def any50(d):
     
     for i in range(0, 50):
         print(f"any50:\t\t {o(rows[i].cells,n=2)} \t {round(rows[i].d2h(d),2)}")
+        
+def evaluate_all(d):
+  rows = d.rows[:]
+  rows.sort(key=lambda row: row.d2h(d))
+  print(f"100%:\t\t {o(rows[0].cells,n=2)} \t {round(rows[0].d2h(d),2)}")
+  
+def smo9(d):
+  budget0 = 4
+  budget = 5
+  some = 0.5
+  d.smo9(budget0,budget,some)
 
 if __name__ == '__main__': 
     # main()
     d = DATA(0)
     for row in csv("././data/auto93.csv"): 
         d.add(row)
+    print("TASK-1:")
+    print("\n")
     stats(d)
     print("#")
     details(d)
     print("#")
+    smo9(d)
+    print("#")
     any50(d)
+    print("#")
+    evaluate_all(d)
 
