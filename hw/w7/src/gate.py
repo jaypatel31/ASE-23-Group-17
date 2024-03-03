@@ -7,6 +7,8 @@ from load import naive
 from ascii_table import display
 import random
 import time
+from stats import SAMPLE, eg0
+import statistics
 
 def help():
     print("OPTIONS:")
@@ -291,6 +293,33 @@ def smo9(d):
   some = 0.5
   d.smo9(budget0,budget,some)
 
+def bonrN(d,n):
+    random.seed(the.seed)
+    randArr = []
+    print_statements = [{"st":"1. top6","data":[]},{"st":"2. top50","data":[]},{"st":"3. most","data":[]},{"st":"4. rand","data":[]},{"st":"5. mid","data":[]},{"st":"6. top","data":[]}]
+    for i in range(20):
+        stats, bests = d.gate(4, n-4, 0.5,print_statements,i)
+        stat, best = stats[-1], bests[-1]
+        randArr.append(round(best.d2h(d),2))
+    return randArr
+
+def randN(d, n):
+    random.seed(the.seed)
+    randArr = []
+    for i in range(20):
+        rows = d.rows[:]  # Copying the list
+        random.shuffle(rows)
+        rowsN = random.sample(rows,n)
+        rowsN.sort(key=lambda row: row.d2h(d))
+        randArr.append(round(rowsN[0].d2h(d),2))
+    return randArr
+
+def base(d):
+    random.seed(the.seed)
+    rows = d.rows[:]  
+    baseline = [row.d2h(d) for row in d.rows]
+    return baseline
+
 if __name__ == '__main__': 
     # main()
     d = DATA(0)
@@ -307,4 +336,26 @@ if __name__ == '__main__':
     any50(d)
     print("#")
     evaluate_all(d)
+
+
+    print("\n\n")
+    print("TASK-2:")
+    print("\n")
+    stats(d)
+    sortedRows =  sorted(d.rows, key=lambda x: x.d2h(d))
+    print(f"best: {o(sortedRows[0].d2h(d),n=2)}")
+    all = base(d)
+    print(f"tiny: {o(statistics.stdev(all)*0.35,n=2)}")
+    print("#base #bonr9 #rand9 #bonr15 #rand15 #bonr20 #rand20 #rand358 ")
+    eg0([
+        SAMPLE(randN(d,9), "rand9"),
+        SAMPLE(randN(d,15), "rand15"),
+        SAMPLE(randN(d,20), "rand20"), 
+        SAMPLE(randN(d,358), "rand358"), 
+        SAMPLE(bonrN(d,9), "bonr9"),
+        SAMPLE(bonrN(d,15), "bonr15"),
+        SAMPLE(bonrN(d,20), "bonr20"),
+        SAMPLE(base(d), "base")
+    ])
+
 
