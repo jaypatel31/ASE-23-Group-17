@@ -58,5 +58,8 @@ class ROW:
         v = [item["x"] for item in u]  # Undecorate
         return v
 
+    def bin(self, x):
+        tmp = (self.hi - self.lo) / (the.bins - 1)
+        return 1 if self.hi == self.lo else int(x / tmp + 0.5) * tmp
     # def norm(self, x):
     #     return x if x == "?" else (x - self.lo) / (self.hi - self.lo + 1E-30)
