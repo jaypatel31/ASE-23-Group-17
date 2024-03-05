@@ -1,7 +1,7 @@
-# Week 6
+# Week 8
 
-Outputs in form of clusters are generated.
+Implemented the range class with several methods that are required for eg.bins
 
-To get clusters working, we implemented the NODE.py file which has walk and show as methods which is responsible for creating nodes and finding the nearest node with distance using the d2h as distance to heaven. 
+Added bins method in appropriate classes required.
 
-We implemented the doubletap, tree and branch methods which are collectively responsible for generating the tree and performing Recursive Random Projections
+We are in process of implementing the final output of eg.bins method. Currently we are getting an output that is not as expected. Will be finished by the coming week.
