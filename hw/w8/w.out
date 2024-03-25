@@ -1,0 +1,33 @@
+
+{at: 0, scored: 0, txt: 'Clndrs', x: {hi: 4, lo: -inf}, y: {HATE: 37, LIKE: 26}}
+{at: 0, scored: 0, txt: 'Clndrs', x: {hi: inf, lo: 4}, y: {HATE: 41}}
+
+{at: 1, scored: 0, txt: 'Volume', x: {hi: 96, lo: -inf}, y: {LIKE: 7, HATE: 9}}
+{at: 1, scored: 0, txt: 'Volume', x: {hi: 114, lo: 96}, y: {LIKE: 11, HATE: 13}}
+{at: 1, scored: 0, txt: 'Volume', x: {hi: 131, lo: 114}, y: {LIKE: 8, HATE: 10}}
+{at: 1, scored: 0, txt: 'Volume', x: {hi: inf, lo: 131}, y: {HATE: 46}}
+
+{at: 3, scored: 0, txt: 'Model', x: {hi: 70, lo: -inf}, y: {LIKE: 5, HATE: 5}}
+{at: 3, scored: 0, txt: 'Model', x: {hi: 71, lo: 70}, y: {LIKE: 4, HATE: 6}}
+{at: 3, scored: 0, txt: 'Model', x: {hi: 72, lo: 71}, y: {LIKE: 5, HATE: 1}}
+{at: 3, scored: 0, txt: 'Model', x: {hi: 73, lo: 72}, y: {LIKE: 7, HATE: 10}}
+{at: 3, scored: 0, txt: 'Model', x: {hi: 74, lo: 73}, y: {LIKE: 5, HATE: 3}}
+{at: 3, scored: 0, txt: 'Model', x: {hi: inf, lo: 74}, y: {HATE: 53}}
+
+{at: 4, scored: 0, txt: 'origin', x: {hi: 1, lo: 1}, y: {HATE: 57}}
+{at: 4, scored: 0, txt: 'origin', x: {hi: 2, lo: 2}, y: {LIKE: 26, HATE: 12}}
+{at: 4, scored: 0, txt: 'origin', x: {hi: 3, lo: 3}, y: {HATE: 9}}
+
+#scores:
+
+0.87 {at: 4, scored: 0, txt: 'origin', x: {hi: 2, lo: 2}, y: {LIKE: 26, HATE: 12}}
+0.68 {at: 0, scored: 0, txt: 'Clndrs', x: {hi: 4, lo: -inf}, y: {HATE: 37, LIKE: 26}}
+0.3 {at: 1, scored: 0, txt: 'Volume', x: {hi: 114, lo: 96}, y: {LIKE: 11, HATE: 13}}
+0.22 {at: 1, scored: 0, txt: 'Volume', x: {hi: 131, lo: 114}, y: {LIKE: 8, HATE: 10}}
+0.19 {at: 1, scored: 0, txt: 'Volume', x: {hi: 96, lo: -inf}, y: {LIKE: 7, HATE: 9}}
+0.18 {at: 3, scored: 0, txt: 'Model', x: {hi: 73, lo: 72}, y: {LIKE: 7, HATE: 10}}
+0.18 {at: 3, scored: 0, txt: 'Model', x: {hi: 72, lo: 71}, y: {LIKE: 5, HATE: 1}}
+0.16 {at: 3, scored: 0, txt: 'Model', x: {hi: 74, lo: 73}, y: {LIKE: 5, HATE: 3}}
+0.14 {at: 3, scored: 0, txt: 'Model', x: {hi: 70, lo: -inf}, y: {LIKE: 5, HATE: 5}}
+0.1 {at: 3, scored: 0, txt: 'Model', x: {hi: 71, lo: 70}, y: {LIKE: 4, HATE: 6}}
+{'LIKE': 26, 'HATE': 78}
