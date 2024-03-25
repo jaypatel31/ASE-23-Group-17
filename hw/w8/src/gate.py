@@ -4,9 +4,12 @@ from test_runner import test
 import re,ast,fileinput
 from DATA import DATA
 from load import naive
+from RANGE import RANGE
+from SYM import SYM
 from ascii_table import display
 import random
 import time
+import math
 
 def help():
     print("OPTIONS:")
@@ -291,20 +294,90 @@ def smo9(d):
   some = 0.5
   d.smo9(budget0,budget,some)
 
+def oo(x):
+    print(o(x))
+    return x
+
+def _ranges(cols, rowss):
+    t = []
+    for col in cols:
+        for range_ in _ranges1(col, rowss):
+            t.append(range_)
+    return t
+
+def _ranges1(col, rowss):
+    out, nrows = {}, 0
+    for y, rows in rowss.items():
+        nrows += len(rows)
+        for row in rows:
+            x = row.cells[col.at]
+            if x != "?":
+                bin_ = col.bin(x)
+                out[bin_] = out.get(bin_, RANGE(col.at, col.txt, x))
+                out[bin_].add(x, y)
+    
+    out = list(out.values())
+    out.sort(key=lambda a: a.x['lo'])
+    return out if isinstance(col, SYM) else _mergeds(out, nrows / the.bins)
+
+def _mergeds(ranges, tooFew):
+    t = []
+    i = 0
+    while i < len(ranges):
+        a = ranges[i]
+        if i < len(ranges) - 1:
+            both = a.merged(ranges[i + 1], tooFew)
+            if both:
+                a = both
+                i += 1
+        t.append(a)
+        i += 1
+    if len(t) < len(ranges):
+        return _mergeds(t, tooFew)
+    for i in range(1, len(t)):
+        t[i].x['lo'] = t[i - 1].x['hi']
+    t[0].x['lo'] = -math.inf
+    t[-1].x['hi'] = math.inf
+    return t
+
+def bins(d):
+    best, rest, evals = d.branch()
+    like = best.rows
+    hate = random.sample(rest.rows, 3 * len(like))
+    t = []
+
+    def score(range_obj):
+        return range_obj.score("LIKE", len(like), len(hate))
+
+    for col in d.cols.x:
+        print("")
+        for range_obj in _ranges1(col, {"LIKE": like, "HATE": hate}):
+            print(range_obj)
+            t.append(range_obj)
+
+    t.sort(key=lambda x: score(x), reverse=True)
+    max_score = score(t[0])
+    print("\n#scores:\n")
+    for v in t[:the.Beam]:
+        if score(v) > max_score * 0.1:
+            print(round(score(v),2), v)
+    print({"LIKE": len(like), "HATE": len(hate)})
+
 if __name__ == '__main__': 
     # main()
     d = DATA(0)
     for row in csv("././data/auto93.csv"): 
         d.add(row)
-    print("TASK-1:")
-    print("\n")
-    stats(d)
-    print("#")
-    details(d)
-    print("#")
-    smo9(d)
-    print("#")
-    any50(d)
-    print("#")
-    evaluate_all(d)
+    bins(d)
+    # print("TASK-1:")
+    # print("\n")
+    # stats(d)
+    # print("#")
+    # details(d)
+    # print("#")
+    # smo9(d)
+    # print("#")
+    # any50(d)
+    # print("#")
+    # evaluate_all(d)
 
