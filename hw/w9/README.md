@@ -1,7 +1,5 @@
-# Week 8
+# Week 9
 
-Implemented the range class with several methods that are required for eg.bins
-
-Added bins method in appropriate classes required.
+Implemented the rule and rules class with several methods that are required for eg.rules
 
 The Result is present in w.out file
