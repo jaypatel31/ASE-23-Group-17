@@ -39,7 +39,7 @@ class RULE:
     def show(self):
         ands = []
         for ranges in self.parts.values():
-            ors = [_showLess(range_) for range_ in ranges]
+            ors = _showLess(ranges)
             at = ors[0].at
             ors = [range_.show() for range_ in ors]
             ands.append(" or ".join(ors))
@@ -47,7 +47,7 @@ class RULE:
 
 def _showLess(t, ready=False):
     if not ready:
-        t = l.copy(t)  # important, since we are about to mess up the y counts
+        t = copy(t)  # important, since we are about to mess up the y counts
         t.sort(key=lambda a: a.x['lo'])
 
     i, u = 0, []
@@ -61,4 +61,12 @@ def _showLess(t, ready=False):
         i += 1
 
     return t if len(u) == len(t) else _showLess(u, True)
+
+def copy(t):
+    if not isinstance(t, dict):
+        return t
+    u = {}
+    for k, v in t.items():
+        u[copy(k)] = copy(v)
+    return u
 

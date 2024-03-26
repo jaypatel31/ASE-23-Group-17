@@ -1,4 +1,5 @@
 from config import the
+from RULE import RULE
 
 class RULES:
     def __init__(self, ranges, goal, rowss):
@@ -26,9 +27,9 @@ class RULES:
         u = []
         for subset in powerset(ranges):
             if subset:
-                rule = RULE.new(subset)
-                score = self.score(rule.selectss(self.rowss))
-                if score > 0.01:
+                rule = RULE(subset)
+                rule.scored = self.score(rule.selectss(self.rowss))
+                if rule.scored > 0.01:
                     u.append(rule)
         return u
 
@@ -55,7 +56,7 @@ def score(t, goal, LIKE, HATE, like=None, hate=None, tiny=None):
         else:
             hate += n
     like, hate = like / (LIKE + tiny), hate / (HATE + tiny)
-    if hate > like:
+    if hate >= like:
         return 0
     else:
         return like ** the.Support / (like + hate)

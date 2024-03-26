@@ -6,6 +6,7 @@ from DATA import DATA
 from load import naive
 from RANGE import RANGE
 from SYM import SYM
+from RULES import RULES
 from ascii_table import display
 import random
 import time
@@ -248,8 +249,9 @@ def o(t, n=None, u=None):
                     u.append(o(v, n))
                 else:
                     u.append(f"${o(k, n)}: ${o(v, n)}")
+        
 
-        return "\t".join(u)
+        return u
 
 
 # def tree(t=None, evals=None):
@@ -363,12 +365,33 @@ def bins(d):
             print(round(score(v),2), v)
     print({"LIKE": len(like), "HATE": len(hate)})
 
+def eg_rules(d):
+    for xxx in range(1, 2):
+        # best, rest = d:branch()
+        best0, rest, evals1 = d.branch(the.d)
+        best, _, evals2 = best0.branch(the.D)
+        print(evals1 + evals2 + the.D - 1)
+        LIKE = best.rows
+        random.sample(rest.rows, 3 * len(LIKE))
+        HATE = random.sample(rest.rows, 3 * len(LIKE))
+        rowss = {"LIKE": LIKE, "HATE": HATE}
+        print("score", "\t\t\t" ,"mid selected", "\t\t\t\t\t", "rules")
+        print("_____", "\t" ,"__________________________________________________", "\t", "__________________")
+        print("")
+        for rule in RULES(_ranges(d.cols.x, rowss), "LIKE", rowss).sorted:
+            result = d.clone(rule.selects(rest.rows))
+            if len(result.rows) > 0:
+                result.rows.sort(key=lambda a: a.d2h(d))
+                print(round(rule.scored,2), "\t" ,o(result.mid().cells), "\t", rule.show())
+
+
+
 if __name__ == '__main__': 
     # main()
     d = DATA(0)
     for row in csv("././data/auto93.csv"): 
         d.add(row)
-    bins(d)
+    eg_rules(d)
     # print("TASK-1:")
     # print("\n")
     # stats(d)
