@@ -59,12 +59,13 @@ class NODE:
             post = ""
             if is_leaf:
                 post = f"\t{self.o(node.here.mid().cells,2)}"
+                return node.here
             else:
                 post = ""
             max_depth = max(max_depth, depth)
-            print('|.. ' * depth + post)
+            # print('|.. ' * depth + post)
 
         self.walk(_show)
-        print("")
-        print("    " * max_depth,  self.o(self.here.mid().cells,2))
-        print("    " * max_depth, "_", str(self.here.cols.names.cells))
+        # print("")
+        # print("    " * max_depth,  self.o(self.here.mid().cells,2))
+        # print("    " * max_depth, "_", str(self.here.cols.names.cells))

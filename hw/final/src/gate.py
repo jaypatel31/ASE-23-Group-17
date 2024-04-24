@@ -11,6 +11,25 @@ from ascii_table import display
 import random
 import time
 import math
+from ROW import ROW
+from raise_utils.interpret import ScottKnott
+
+from numpy import unique
+from numpy import where
+from matplotlib import pyplot
+from sklearn.datasets import make_classification
+from sklearn.cluster import KMeans
+from sklearn.cluster import DBSCAN
+import numpy as np
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler 
+from sklearn.preprocessing import normalize
+import pandas as pd
+
+from sklearn.neighbors import NearestNeighbors
+from matplotlib import pyplot as plt
+import timeit
+
 
 def help():
     print("OPTIONS:")
@@ -294,7 +313,7 @@ def smo9(d):
   budget0 = 4
   budget = 5
   some = 0.5
-  d.smo9(budget0,budget,some)
+  return d.smo9(budget0,budget,some)
 
 def oo(x):
     print(o(x))
@@ -384,23 +403,369 @@ def eg_rules(d):
                 result.rows.sort(key=lambda a: a.d2h(d))
                 print(round(rule.scored,2), "\t" ,o(result.mid().cells), "\t", rule.show())
 
+def kmeans_20(d):
+    bests = []
+    for i in range(1):
+        rows = d.rows[:]
+        
+        # Only for health Dataset
+        for row in rows:
+            # in row.cells[7] if absolute_error make it 0, sqaured_error make it 1  else 
+            if(row.cells[7]=="absolute_error"):
+                row.cells[7] = 0
+            elif(row.cells[7]=="squared_error"):
+                row.cells[7] = 1
+            else:
+                row.cells[7] = 2
+        
+        X = np.array([np.array(row.cells) for row in d.rows[1:]])
 
+        # Elbow Method
+        # wcss = []
+        # for i in range(1, 21):
+        #     kmeans = KMeans(n_clusters=i, max_iter=300, n_init=10, random_state=0)
+        #     kmeans.fit(X)  # X is your data
+        #     wcss.append(kmeans.inertia_)
+
+        # plt.plot(range(1, 21), wcss)
+        # plt.title('Elbow Method')
+        # plt.xlabel('Number of clusters')
+        # plt.ylabel('WCSS')
+        # plt.show()
+
+        kmeans = KMeans(n_clusters = 3, n_init = 100).fit(X)
+
+        predections = kmeans.predict(X)
+        clusters = {}
+        for i in range(len(predections)):
+            if predections[i] not in clusters:
+                d_new = DATA(0)
+                d_new.add(d.cols.names.cells)
+                clusters[predections[i]] = d_new
+            clusters[predections[i]].add(X[i])
+
+
+        def calculate_mid_d2h(cluster):
+            mid_value = cluster.mid()  # Assuming mid() returns the midpoint of the cluster
+            d2h_value = mid_value.d2h(cluster)  # Assuming d2h() calculates a distance metric
+            return d2h_value
+        
+
+        # Sort clusters based on the mid().d2h() value
+        sorted_clusters = list(clusters.values())
+
+        # Sort clusters based on the mid().d2h() value
+        sorted_clusters.sort(key=calculate_mid_d2h)
+
+        sorted_clusters[0].rows.sort(key=lambda row: row.d2h(d))
+        bests.append(sorted_clusters[0].rows[0].d2h(d))
+        # print(sorted_clusters[0].rows[0].d2h(d))
+
+    return bests
+
+def dbscan_20(d):
+    # Process the data
+    bests = []
+    start_eps = 50
+    end_eps = 100
+    for i in range(1):
+        rows = d.rows[:]
+
+        # Only for health Dataset
+        for row in rows:
+            # Map row.cells[7] to numeric values based on your conditions
+            if row.cells[7] == "absolute_error":
+                row.cells[7] = 0
+            elif row.cells[7] == "squared_error":
+                row.cells[7] = 1
+            else:
+                row.cells[7] = 2
+        
+        # Extract the feature vectors
+        X = np.array([np.array(row.cells) for row in d.rows[1:]])
+
+        # neighbors = NearestNeighbors(n_neighbors=22)
+        # neighbors_fit = neighbors.fit(X)
+        # distances, indices = neighbors_fit.kneighbors(X)
+        # eps_value = 100 + 3.0 * i
+
+        eps_value = start_eps + (end_eps - start_eps) * (i / 20)
+
+        # # Perform DBSCAN clustering
+        dbs = DBSCAN(eps=eps_value, min_samples=44).fit(X)
+
+        # distances = np.sort(distances, axis=0)
+        # distances = distances[:,1]
+        # plt.plot(distances)
+        # plt.show()
+        
+        # Retrieve cluster labels and core sample indices
+        labels = dbs.labels_
+
+
+        #Organize clusters into dictionaries
+        clusters = {}
+        for i, label in enumerate(labels):
+            if label == -1:
+                continue
+            if label not in clusters:
+                d_new = DATA(0)  # Assuming DATA(0) is a placeholder for a new dataset
+                d_new.add(d.cols.names.cells)
+                clusters[label] = d_new
+            clusters[label].add(X[i])
+
+        print(len(clusters))
+        
+
+        def calculate_mid_d2h(cluster):
+            mid_value = cluster.mid()  # Assuming mid() returns the midpoint of the cluster
+            d2h_value = mid_value.d2h(cluster)  # Assuming d2h() calculates a distance metric
+            return d2h_value
+        
+
+        # Sort clusters based on the mid().d2h() value
+        sorted_clusters = list(clusters.values())
+        sorted_clusters.sort(key=calculate_mid_d2h)
+        sorted_clusters[0].rows.sort(key=lambda row: row.d2h(d))
+        bests.append(sorted_clusters[0].rows[1].d2h(d))
+
+    return bests
+
+def rrp_20(d,elem):
+    bests = []
+    for i in range(1):
+        best, rest, evals = d.branch(elem)
+        rows = best.rows[:]
+        rows.sort(key=lambda row: row.d2h(d))
+        bests.append(rows[0].d2h(d))
+    return bests
+
+def run_smo_20(d,elem):
+    stats = []
+    bests_all = []
+    budget0 = 4
+    budget = elem
+    some = 0.5
+    for i in range(1):
+        random.seed(20*i)
+        stats, bests = d.smo9(budget0, budget, some)
+        stat, best = stats[-1], bests[-1]
+        bests_all.append(best.d2h(d))
+        # print(rnd(best.d2h(d)), rnd(stat.d2h(d)))
+    return bests_all
+
+def plot_running_times():
+    algorithm_names = ['SMO9', 'SMO24', 'SMO32', 'SMO64', 'RRP9', 'RRP24', 'RRP32', 'RRP64', 'KMeans', 'DBSCAN']
+    running_times = [0.08864763975143433, 0.3944209575653076, 0.5034198522567749, 0.9677125453948975, 0.04634635448455811, 0.044590091705322264, 0.045543551445007324, 0.044534814357757566, 19.19049354791641, 0.06285688877105713]
+
+    # divide running times by 20
+    running_times = [time / 20 for time in running_times]
+
+    # in print keep int value limited to three decimal point
+    def prt(x):
+        return round(x,3)
+    
+
+    plt.bar(algorithm_names, running_times, color=['blue', 'green', 'red'])  # Adjust colors as needed
+    plt.title('Running Times of Different Algorithms on DTLZ Dataset')
+    plt.xlabel('Algorithms')
+    plt.ylabel('Running Time (seconds)')
+    plt.show()
+    running_times = [prt(x) for x in running_times]
+    print(running_times)
+
+
+def randN(d, n):
+    random.seed(the.seed)
+    randArr = []
+    for i in range(20):
+        rows = d.rows[:]  # Copying the list
+        random.shuffle(rows)
+        rowsN = random.sample(rows,n)
+        rowsN.sort(key=lambda row: row.d2h(d))
+        randArr.append(round(rowsN[0].d2h(d),2))
+    return randArr
 
 if __name__ == '__main__': 
     # main()
     d = DATA(0)
-    for row in csv("././data/auto93.csv"): 
-        d.add(row)
-    eg_rules(d)
-    # print("TASK-1:")
-    # print("\n")
-    # stats(d)
-    # print("#")
-    # details(d)
-    # print("#")
-    # smo9(d)
+    for i in range(11):
+        j=0
+        for row in csv(f"././data/health{i}.csv"): 
+            if j==0 and i!=0:
+                j += 1
+                continue
+            d.add(row)
+
+    print(len(d.rows))
+    
+    algo = []
+    time_all = []
+
+    bestrand9 = randN(d,9)
+    bestrand24 = randN(d,24)
+    bestrand32 = randN(d,32)
+    bestrand64 = randN(d,64)
+
+    # plot_running_times()
+
+    # SMO
+    # start_time = time.time()
+    # bests_smo9 = run_smo_20(d,5)
+    # end_time = time.time()
+    # algo.append("SMO9")
+    # time_all.append(end_time-start_time)
+
+    # start_time = time.time()
+    # bests_smo24 = run_smo_20(d,24)
+    # end_time = time.time()
+    # algo.append("SMO24")
+    # time_all.append(end_time-start_time)
+
+    # start_time = time.time()
+    # bests_smo32 = run_smo_20(d,32)
+    # end_time = time.time()
+    # algo.append("SMO32")
+    # time_all.append(end_time-start_time)
+
+    # start_time = time.time()
+    # bests_smo64 = run_smo_20(d,64)
+    # end_time = time.time()
+    # algo.append("SMO64")
+    # time_all.append(end_time-start_time)
+
+    # # print("SMO DONE")
+
+    # # #RRP
+    # start_time = time.time()
+    # bests_rrp9 = rrp_20(d,9)
+    # end_time = time.time()
+    # algo.append("RRP9")
+    # time_all.append(end_time-start_time)
+
+    # start_time = time.time()
+    # bests_rrp24 = rrp_20(d,28)
+    # end_time = time.time()
+    # algo.append("RRP24")
+    # time_all.append(end_time-start_time)
+
+    # start_time = time.time()
+    # bests_rrp32 = rrp_20(d,36)
+    # end_time = time.time()
+    # algo.append("RRP32")
+    # time_all.append(end_time-start_time)
+
+    # start_time = time.time()
+    # bests_rrp64 = rrp_20(d,68)
+    # end_time = time.time()
+    # algo.append("RRP64")
+    # time_all.append(end_time-start_time)
+
+    # # print('RRP DONE')
+        
+    # # # KMeans
+    # start_time = time.time()
+    # best_kmean = kmeans_20(d)
+    # end_time = time.time()
+    # algo.append("KMeans")
+    # time_all.append(end_time-start_time)
+
+        
+    # # DBSCAN
+    # start_time = time.time()
+    # best_dbscan = dbscan_20(d)
+    # end_time = time.time()
+    # algo.append("DBSCAN")
+    # time_all.append(end_time-start_time)
+
+    # print(algo)
+    # print(time_all)
+
+    
+
+    # sk = ScottKnott({
+    #               'smo9': bests_smo9,
+    #                 'smo24': bests_smo24,
+    #                 'smo32': bests_smo32,
+    #                 'smo64': bests_smo64,
+    #               'rrp9': bests_rrp9,
+    #                 'rrp24': bests_rrp24,
+    #                 'rrp32': bests_rrp32,
+    #                 'rrp64': bests_rrp64,
+    #               'kmeans': best_kmean,
+    #               'dbscan': best_dbscan
+    #             })
+    # sk.pprint() 
+
+    sk = ScottKnott({
+                  'rand9': bestrand9,
+                    'rand24': bestrand24,
+                    'rand32': bestrand32,
+                    'rand64': bestrand64
+                })
+    sk.pprint() 
+
+
+
+    # best,worst,mean = dbscan(d)
+    # print("DBSCAN-Best: ",best.mid().d2h(best))
+    # print("DBSCAN-Worst: ",worst.mid().d2h(worst))
+    # print("DBSCAN-Mean: ",mean)
+        
+    # best,worst,mean = kmeans(d)
+    # print("Kmeans-Best: ",best.mid().d2h(best))
+    # print("Kmeans-Worst: ",worst.mid().d2h(worst))
+    # print("Kmeans-Mean: ",mean)
+    
+    # d3 = DATA(0)
+    # for row in csv("././data/health0.csv"): 
+    #     d3.add(row)
+    # # eg_rules(d)
+    # # print("TASK-1:")
+    # # print("\n")
+    # # stats(d)
+    # # print("#")
+    # # details(d)
+    # # print("#")
+    # d2 = DATA(0)
+    # # print()
+    # d2.add(d.cols.names.cells)
+    
+    # bestrrp,_,__ = d3.branch(32)
+    # print("Number of Rows in cluster",len(bestrrp.rows))
+    # print("RRP-26: ",bestrrp.mid().d2h(d3))
     # print("#")
     # any50(d)
     # print("#")
     # evaluate_all(d)
 
+
+# def algorithm_1(input_size):
+#     # Implement algorithm 1
+#     start_time = time.time()
+#     # Run algorithm 1 with given input size
+#     # Example: some_function(input_size)
+#     time.sleep(0.1)  # Simulating computation time
+#     end_time = time.time()
+#     return end_time - start_time
+
+# def algorithm_2(input_size):
+#     # Implement algorithm 2
+#     start_time = time.time()
+#     # Run algorithm 2 with given input size
+#     # Example: another_function(input_size)
+#     time.sleep(0.2)  # Simulating computation time
+#     end_time = time.time()
+#     return end_time - start_time
+
+
+
+# if __name__ == "__main__":
+#     # Input size (assuming it's constant)
+#     input_size = 100
+
+#     # List of algorithms to compare
+#     algorithms = [algorithm_1, algorithm_2]
+
+#     # Plot the running times of the algorithms
+#     plot_running_times(algorithms, input_size)
